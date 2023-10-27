@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+    @apply py-2 px-4 rounded;
+}
+a.btn {
+    @apply inline-block text-center;
+}
+
+.btn-primary {
+    @apply bg-primary-900 text-white;
+}
+
+.btn-primary:hover {
+    @apply bg-primary-950;
+}

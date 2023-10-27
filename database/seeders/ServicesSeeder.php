@@ -1,0 +1,205 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Product;
+use App\Models\Service;
+use App\Models\ServiceKindEnum;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use Ramsey\Uuid\Uuid;
+use Str;
+
+class ServicesSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $mtnMomo = new Service;
+        $mtnMomo->name = "MTN Mobile Money";
+        $mtnMomo->description = "Mobile money payments";
+        $mtnMomo->image = "mtn-momo.png";
+        $mtnMomo->slug = Str::slug($mtnMomo->name);
+        $mtnMomo->kind = ServiceKindEnum::payment->value;
+        $mtnMomo->uuid = Uuid::uuid4()->toString();
+        // $mtnMomo->provider_id_1 = '20053';
+        // $mtnMomo->provider_id_2 = 'CM_MTN_VTU_CASHOUT_OP';
+        $mtnMomo->provider_id_1 = 'CHANNEL_TEST';
+        $mtnMomo->provider_id_2 = '';
+        $mtnMomo->enabled = true;
+        $mtnMomo->public = false;
+        $mtnMomo->min_amount = 10;
+        $mtnMomo->max_amount = 50000;
+        $mtnMomo->form_input_label = "Numéro MTN Mobile Money";
+        $mtnMomo->form_input_placeholder = "ex: +237650675795";
+        $mtnMomo->form_input_regex = "((|(0{2}))?237)?((67|650|651|652|653|654|680|681|682|683)([0-9]{6,7}))$";
+        $mtnMomo->provider = "pg";
+        $mtnMomo->save();
+
+        $mtnMomoDebit = new Product;
+        $mtnMomoDebit->service_id = $mtnMomo->id;
+        $mtnMomoDebit->color = "bg-black-900";
+        $mtnMomoDebit->name = "Collecte MTN Mobile Money";
+        $mtnMomoDebit->default = true;
+        // $mtnMomoDebit->provider_id_1 = '20053';
+        // $mtnMomoDebit->provider_id_2 = 'CM_MTN_VTU_CASHOUT_OP';
+        $mtnMomoDebit->provider_id_1 = 'CHANNEL_TEST';
+        $mtnMomoDebit->provider_id_2 = '';
+        $mtnMomoDebit->description = "Collecte MTN Mobile Money";
+        $mtnMomoDebit->uuid = Uuid::uuid4();
+        $mtnMomoDebit->slug = Str::slug("mtn-collect");
+        $mtnMomoDebit->fixed_price = false;
+        $mtnMomoDebit->enabled = true;
+        $mtnMomoDebit->save();
+
+        $orangeMoney = new Service;
+        $orangeMoney->name = "Orange Money";
+        $orangeMoney->description = "Paiements orange money";
+        $orangeMoney->image = "orange-money.png";
+        $orangeMoney->slug = Str::slug($orangeMoney->name);
+        $orangeMoney->kind = ServiceKindEnum::payment->value;
+        $orangeMoney->uuid = Uuid::uuid4()->toString();
+        $orangeMoney->provider_id_1 = '20053';
+        $orangeMoney->provider_id_2 = 'CM_MTN_VTU_CASHOUT_OP';
+        $orangeMoney->enabled = true;
+        $orangeMoney->public = false;
+        $orangeMoney->min_amount = 10;
+        $orangeMoney->max_amount = 50000;
+        $orangeMoney->form_input_label = "Numéro Orange Money";
+        $orangeMoney->form_input_placeholder = "ex: +23791080200";
+        $orangeMoney->form_input_regex = "((|(0{2}))?237)?((69|655|656|657|658|659)([0-9]{6,7}))$";
+        $orangeMoney->provider = "pg";
+        $orangeMoney->save();
+
+        $orangeMoneyDebit = new Product;
+        $orangeMoneyDebit->service_id = $orangeMoney->id;
+        $orangeMoneyDebit->color = "bg-black-900";
+        $orangeMoneyDebit->name = "Collecte Orange Money";
+        $orangeMoneyDebit->default = true;
+        $orangeMoneyDebit->provider_id_1 = '50053';
+        $orangeMoneyDebit->provider_id_2 = '900402';
+        $orangeMoneyDebit->description = "Collecte Orange Money";
+        $orangeMoneyDebit->uuid = Uuid::uuid4();
+        $orangeMoneyDebit->slug = Str::slug("orange-collect");
+        $orangeMoneyDebit->fixed_price = false;
+        $orangeMoneyDebit->enabled = true;
+        $orangeMoneyDebit->save();
+
+        $product = new Product;
+        $product->service_id = $mtnMomo->id;
+        $product->color = "yellow";
+        $product->name = "Paiement MTN Mobile Money";
+        $product->description = $product->name;
+        $product->uuid = Uuid::uuid4();
+        $product->slug = Str::slug($product->name);
+        $product->fixed_price = false;
+        $product->enabled = true;
+        $product->save();
+
+
+        $canalPlus = new Service;
+        $canalPlus->name = "Canal+";
+        $canalPlus->image = "canal-plus.png";
+        $canalPlus->slug = Str::slug($canalPlus->name);
+        $canalPlus->kind = ServiceKindEnum::bill->value;
+        $canalPlus->uuid = Uuid::uuid4()->toString();
+        $canalPlus->form_input_label = "Numéro de décodeur";
+        $canalPlus->form_input_placeholder = "10 chiffres, ex: 12083839393039";
+        $canalPlus->form_input_regex = "^[0-9]{10}$";
+        $canalPlus->description = "Abonnement et réabonnement canal plus";
+        $canalPlus->provider_id_1 = '20053';
+        $canalPlus->provider_id_2 = 'CM_MTN_VTU_CASHOUT_OP';
+        $canalPlus->enabled = true;
+        $canalPlus->public = true;
+        $canalPlus->provider = "pg";
+        $canalPlus->save();
+
+        $canalPlusProducts = [
+            [
+                "name" => "ACCESS",
+                "description" => "Plus de 245 chaînes, radios et services + MyCanal",
+                "price" => "5000",
+                "color" => "gray-800"
+            ],
+            [
+                "name" => "EVASION",
+                "description" => "Plus de 280 chaînes, radios et services + MyCanal",
+                "price" => 10000,
+                "color" => "gray-800"
+            ],
+            [
+                "name" => "ESSENTIEL+",
+                "description" => "Plus de 200 chaînes, radios et services+ MyCanal + les chaine",
+                "price" => 13000,
+                "color" => "gray-600"
+            ],
+            [
+                "name" => "ACCESS+",
+                "description" => "Plus de 200 chaînes, radios et services+ MyCanal + les chaine",
+                "price" => 15000,
+                "color" => "gray-600"
+            ],
+            [
+                "name" => "EVASION+",
+                "description" => "Plus de 310 chaînes, radios et services + MyCanal + les chaine",
+                "price" => 20000,
+                "color" => "gray-600"
+            ],
+            [
+                "name" => "TOUT CANAL+",
+                "description" => "Plus de 320 chaînes, radios et services radios et services + MyCanal + les chaine",
+                "price" => 40000,
+                "color" => "gray-900"
+            ]
+        ];
+        foreach ($canalPlusProducts as $data) {
+            $product = new Product;
+            $product->service_id = $canalPlus->id;
+            $product->color = $data["color"];
+            $product->name = $data["name"];
+            $product->description = $data["description"];
+            $product->uuid = Uuid::uuid4();
+            $product->slug = Str::slug($data["name"]);
+            $product->fixed_price = true;
+            $product->price = $data["price"];
+            $product->enabled = true;
+            $product->save();
+        }
+
+        $blue = new Service;
+        $blue->name = "CAMTEL";
+        $blue->image = "blue.png";
+        $blue->slug = Str::slug($blue->name);
+        $blue->kind = ServiceKindEnum::bill->value;
+        $blue->uuid = Uuid::uuid4()->toString();
+        $blue->min_amount = 10;
+        $blue->max_amount = 50000;
+        $blue->form_input_label = "Numéro camtel";
+        $blue->form_input_placeholder = "Numéro CAMTEL, ex: 6XXXXXXXX";
+        $blue->form_input_regex = "^[0-9]{9}$";
+        $blue->description = "Abonnement et crédit de communication camtel";
+        $blue->provider_id_1 = '20053';
+        $blue->provider_id_2 = 'CM_MTN_VTU_CASHOUT_OP';
+        $blue->enabled = true;
+        $blue->public = true;
+        $blue->provider = "pg";
+        $blue->save();
+
+        $blueAirtime = new Product;
+        $blueAirtime->service_id = $blue->id;
+        $blueAirtime->color = 'bg-black-900';
+        $blueAirtime->name = "Crédit Blue/Camtel";
+        $blueAirtime->description = "Acheter de crédit de communication";
+        $blueAirtime->uuid = Uuid::uuid4();
+        $blueAirtime->slug = 'credit';
+        $blueAirtime->provider_id_1 = 'CHANNEL_CAMTEL';
+        $blueAirtime->provider_id_2 = '';
+        $blueAirtime->fixed_price = false;
+        $blueAirtime->price = null;
+        $blueAirtime->enabled = true;
+        $blueAirtime->save();
+
+    }
+}

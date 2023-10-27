@@ -1,0 +1,78 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="title" content="Login" />
+<meta name="language" content="en" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login</title>
+    <link rel="shortcut icon" href="/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/style-login.min.css" />
+    </head>
+<body>
+<div class="content">
+    <!-- HEADER -->
+<div id="header">
+
+    <div class="page-full-width cf">
+
+        <div id="login-intro" class="fl">
+            <h1>Login to Smobilpay</h1>
+            <h5>Please enter your credentials below</h5>
+
+        </div>
+        <!-- login-intro -->
+
+        <!-- Change this image to your own company's logo -->
+        <!-- The logo will automatically be resized to 39px height. -->
+        <a href="/" id="company-branding" class="fr"><img src="/images/branding/logo_login.png" alt="maviance" /> </a>
+
+    </div>
+    <!-- end full-width -->
+
+</div>
+<!-- end header -->
+<!-- MAIN CONTENT -->
+<div id="content">
+    <form action="/login" method="post" id="login-form">
+                <input type="hidden" name="signin[_csrf_token]" value="db59f435ec203111273d6df5d1d6b6ab" id="signin__csrf_token" />
+        <fieldset>
+            <p>
+                <label for="login-username">Username </label> <input type="text" id="signin_username" name="signin[username]" class="round full-width-input" autofocus />
+            </p>
+
+            <p>
+                <label for="login-password">Password </label> <input type="password" name="signin[password]" id="signin[password]" class="round full-width-input" />
+            </p>
+
+                            <p><a href="/forgot_password">Forgot your password?</a></p>
+            
+            
+            <input id='tsubmit' name="login" class="button round blue image-right ic-right-arrow" type="submit" style="" value="LOG IN" />
+        </fieldset>
+
+        <br />
+
+        <div class="information-box round">Enter your credentials and click on the LOG IN button to continue. In case you run into problems, contact: <a href="mailto:support@cm.smobilpay.com">support@cm.smobilpay.com</a></div>
+            </form>
+
+</div>
+<!-- end content -->
+
+
+<!-- FOOTER -->
+<div id="footer">
+
+    <p>
+        &copy; Copyright 2009 - 2023 <a href="http://www.maviance.com">maviance</a>.
+        All rights reserved.
+    </p>
+    <span class="symfony"><img src="/images/branding/smobilpay_brand.png" alt="powered by Smobilpay" /></span>
+
+</div>
+<!-- end footer --></div>
+</body>
+</html>
