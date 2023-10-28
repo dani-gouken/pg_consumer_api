@@ -41,7 +41,7 @@ class PaymentGatewayService implements TransactionServiceInterface, HandlesCallb
             "country" => "cm",
             "recipient" => "237{$transaction->destination}",
             "channel" => $transaction->product->provider_id_1,
-            "type" => "payout"
+            "type" => "cash_collect"
         ]);
         if ($initiatedTx->failed()) {
             Log::error("failed to initiate a payment", $initiatedTx->json());
@@ -70,7 +70,7 @@ class PaymentGatewayService implements TransactionServiceInterface, HandlesCallb
 
         $executedTx = $this->makeRequest()->put("/api/payment/{$uuid}", [
             "publicKey" => $this->publicKey,
-            "schema_type" => $transaction->service->kind == ServiceKindEnum::payment ? "NO_SCHEMA" : "PHONE_NUMBER",
+            "schema_type" => $transaction->service->kind == ServiceKindEnum::payment ? "CM_MOBILE_MONEY_SCHEMA" : "PHONE_NUMBER",
             "schema" => [
                 "phoneNumber" => "237{$transaction->destination}"
             ]
