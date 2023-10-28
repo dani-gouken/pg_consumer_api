@@ -41,7 +41,7 @@ class PaymentGatewayService implements TransactionServiceInterface, HandlesCallb
             "country" => "cm",
             "recipient" => "237{$transaction->destination}",
             "channel" => $transaction->product->provider_id_1,
-            "type" => "cash_collect"
+            "type" => $transaction->service->kind == ServiceKindEnum::payment ? "cash_collect" : "payout"
         ]);
         if ($initiatedTx->failed()) {
             Log::error("failed to initiate a payment", $initiatedTx->json());
