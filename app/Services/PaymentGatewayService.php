@@ -34,16 +34,19 @@ class PaymentGatewayService implements TransactionServiceInterface, HandlesCallb
     }
     public function initiate(Transaction $transaction): TransactionResult
     {
-        $initiatedTx = $this->makeRequest()->post("/api/payment", [
+        $payload =  [
             "publicKey" => $this->publicKey,
             "amount" => $transaction->amount,
             "reference" => $transaction->uuid,
             "country" => "cm",
             "recipient" => "237{$transaction->destination}",
             "channel" => $transaction->product->provider_id_1,
-            "service" => $transaction->product->provider_id_2 ?? "",
             "type" => $transaction->service->kind == ServiceKindEnum::payment ? "cash_collect" : "payout"
-        ]);
+        ];
+        if(!empty($transaction->product->provider_id_2)) {
+            $payload["service"] = $transaction->product->provider_id_2 ?? ""; 
+        }
+        $initiatedTx = $this->makeRequest()->post("/api/payment",$payload);
         if ($initiatedTx->failed()) {
             Log::error("failed to initiate a payment", $initiatedTx->json());
             return new TransactionResult(
