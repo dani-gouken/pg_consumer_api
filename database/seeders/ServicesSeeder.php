@@ -201,5 +201,178 @@ class ServicesSeeder extends Seeder
         $blueAirtime->enabled = true;
         $blueAirtime->save();
 
+        $camtelProducts = [
+            [
+                "name" => "Blue GO S",
+                "provider_id_2" => "BLUE_GO_S",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 2_000,
+                "description" => "300 Mo/Jour",
+                "color" => "bg-gray-800"
+            ],
+            [
+                "name" => "Blue GO M",
+                "provider_id_2" => "BLUE_GO_M",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 5_000,
+                "description" => "850 Mo/Jour",
+                "color" => "bg-gray-800"
+            ],
+            [
+                "name" => "Blue GO L",
+                "provider_id_2" => "BLUE_GO_L",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 10_000,
+                "description" => "2 Go/Jour",
+                "color" => "bg-gray-800"
+            ],
+            [
+                "name" => "Blue GO XL",
+                "provider_id_2" => "BLUE_GO_XL",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 20_000,
+                "description" => "4.5 Go/Jour",
+                "color" => "bg-gray-800"
+            ],
+            [
+                "name" => "Blue GO XXL",
+                "provider_id_2" => "BLUE_GO_XXL",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 35_000,
+                "description" => "8 Go/Jour",
+                "color" => "bg-gray-800"
+            ],
+            [
+                "name" => "Blue GO Plus S",
+                "provider_id_2" => "BLUE_GO_PLUS_S",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 15_000,
+                "description" => "60 Go/30 jours",
+                "color" => "bg-gray-800"
+            ],
+            [
+                "name" => "Blue GO Plus M",
+                "provider_id_2" => "BLUE_GO_PLUS_M",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 25_000,
+                "description" => "135 Go/30 jours",
+                "color" => "bg-gray-800"
+            ],
+            [
+                "name" => "Blue GO Plus L",
+                "provider_id_2" => "BLUE_GO_PLUS_L",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 40_000,
+                "description" => "240 Go/30 jours",
+                "color" => "bg-gray-800"
+            ],
+
+            [
+                "name" => "Blue Night",
+                "provider_id_2" => "BLUE_NIGHT",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 250,
+                "description" => "5 Go/22h-06h",
+                "color" => "bg-gray-800"
+            ],
+            [
+                "name" => "Blue One S",
+                "provider_id_2" => "BLUE_ONE_S",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 2_000,
+                "description" => "Whatsapp, Facebook Télégram, Twitter + 4Go / 1 semaine",
+                "color" => "bg-gray-800"
+            ],
+            [
+                "name" => "Blue One M",
+                "provider_id_2" => "BLUE_ONE_M",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 3_000,
+                "description" => "Whatsapp, Facebook Télégram, Twitter + 5Go / 30 jours",
+                "color" => "bg-gray-800"
+            ],
+            [
+                "name" => "Blue One L",
+                "provider_id_2" => "BLUE_ONE_L",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 5_000,
+                "description" => "Whatsapp, Facebook, Télégram, Twitter, Instagram + 8 Go / 30 jours",
+                "color" => "bg-gray-800"
+            ],
+            [
+                "name" => "Blue One XL",
+                "provider_id_2" => "BLUE_ONE_XL",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 10_000,
+                "description" => "Whatsapp, Facebook, Télégram, Twitter, Instagram , Youtube + 20 Go / 30 jours",
+                "color" => "bg-gray-800"
+            ],
+            [
+                "name" => "Blue One XXL",
+                "provider_id_2" => "BLUE_ONE_XXL",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 20_000,
+                "description" => "Whatsapp, Facebook, Télégram, Twitter, Instagram , Youtube, Netflix + 50 Go / 30 jours",
+                "color" => "bg-gray-800"
+            ],
+
+            [
+                "name" => "Blue Mo S",
+                "provider_id_2" => "BLUE_MO_S",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 100,
+                "description" => "1 Go / 3 heures",
+                "color" => "bg-gray-800"
+            ],
+            [
+                "name" => "Blue Mo M",
+                "provider_id_2" => "BLUE_MO_M",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 300,
+                "description" => "1.5 Go / Jour",
+                "color" => "bg-gray-800"
+            ],
+            [
+                "name" => "Blue Mo L",
+                "provider_id_2" => "BLUE_MO_L",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 500,
+                "description" => "2Go / 2 Jours",
+                "color" => "bg-gray-800"
+            ],
+            [
+                "name" => "Blue Mo XL",
+                "provider_id_2" => "BLUE_MO_XL",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 1000,
+                "description" => "2Go / 7 jours",
+                "color" => "bg-gray-800"
+            ],
+            [
+                "name" => "Blue Mo XXL",
+                "provider_id_2" => "BLUE_MO_XXL",
+                "provider_id_1" => "CHANNEL_CAMTEL",
+                "price" => 5000,
+                "description" => "10Go / 1 month",
+                "color" => "bg-gray-800"
+            ],
+        ];
+
+        foreach ($camtelProducts as $data) {
+            $product = new Product;
+            $product->service_id = $blue->id;
+            $product->color = $data["color"];
+            $product->name = $data["name"];
+            $product->description = $data["description"];
+            $product->provider_id_1 = $data["provider_id_1"];
+            $product->provider_id_2 = $data["provider_id_2"];
+            $product->uuid = Uuid::uuid4();
+            $product->slug = Str::slug($data["name"]);
+            $product->fixed_price = true;
+            $product->price = $data["price"];
+            $product->enabled = true;
+            $product->save();
+        }
+
     }
 }

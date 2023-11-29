@@ -41,6 +41,7 @@ class PaymentGatewayService implements TransactionServiceInterface, HandlesCallb
             "country" => "cm",
             "recipient" => "237{$transaction->destination}",
             "channel" => $transaction->product->provider_id_1,
+            "service" => $transaction->product->provider_id_2,
             "type" => $transaction->service->kind == ServiceKindEnum::payment ? "cash_collect" : "payout"
         ]);
         if ($initiatedTx->failed()) {
