@@ -15,7 +15,7 @@ class ServiceResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "image" => \Vite::asset($this->logo_url),
+            "image" => \Vite::asset($this->image),
             "name" => $this->name,
             "description" => $this->description,
             "kind" => $this->kind,
