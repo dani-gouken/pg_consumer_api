@@ -1,7 +1,7 @@
 
 <footer>
     <div class="px-4 py-6 md:flex md:items-center md:justify-between">
-        <span class="text-sm text-gray-500 sm:text-center">© 2023 <a href="#">QuickPay</a>. All Rights Reserved.
+        <span class="text-sm text-gray-500 sm:text-center">© 2023 <a href="#">{{ config('app.name') }}</a>. All Rights Reserved.
         </span>
         <div class="flex mt-4 space-x-5 sm:justify-center md:mt-0">
             <a href="#" class="text-gray-400 hover:text-gray-900">
