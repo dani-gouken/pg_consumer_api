@@ -34,7 +34,7 @@
                     <h1 class="font-bold text-primary-950 text-2xl italic">
                         <a href="{{ route('service.index') }}" class="flex">
                             <img src="{{ Vite::asset('resources/images/icon.png') }}" class="w-16 h-16" />
-                            <div class="mt-4">{{ config('app.name') }}</div>
+                            {{-- <div class="mt-4">{{ config('app.name') }}</div> --}}
                         </a>
                     </h1>
                 </div>
