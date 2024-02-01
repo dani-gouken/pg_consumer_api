@@ -55,7 +55,7 @@ class PaymentGatewayServiceTest extends TestCase
         Http::assertSent(
             fn(Request $request): bool =>
             ($request->header('Authorization')[0] === "Bearer {$privateKey}") &&
-            $request->url() === "$baseUrl/payment" &&
+            str_contains($request->url(), "api/payment") &&
             $request->method() === "POST"
             && $request->body() === json_encode([
                 "publicKey" => $publicKey,
@@ -105,7 +105,7 @@ class PaymentGatewayServiceTest extends TestCase
         Http::assertSent(
             fn(Request $request): bool =>
             ($request->header('Authorization')[0] === "Bearer {$privateKey}") &&
-            $request->url() === "$baseUrl/payment/someid" &&
+            str_contains($request->url(), "$baseUrl/api/payment/someid") &&
             $request->method() === "GET"
         );
 
@@ -124,7 +124,7 @@ class PaymentGatewayServiceTest extends TestCase
     {
         $baseUrl = config("pg.baseUrl");
         return [
-            "$baseUrl/payment/*" => Http::response(
+            "$baseUrl/api/payment/*" => Http::response(
                 json_encode([
                     'success' => true,
                     'code' => 601,
@@ -151,7 +151,7 @@ class PaymentGatewayServiceTest extends TestCase
                 ]),
                 202
             ),
-            "$baseUrl/payment" => Http::sequence()
+            "$baseUrl/api/payment" => Http::sequence()
                 ->push(
                     json_encode([
                         'success' => true,
@@ -209,7 +209,7 @@ class PaymentGatewayServiceTest extends TestCase
     {
         $baseUrl = config("pg.baseUrl");
         return [
-            "$baseUrl/payment/*" => Http::response(
+            "$baseUrl/api/payment/*" => Http::response(
                 json_encode([
                     'success' => true,
                     'code' => 601,

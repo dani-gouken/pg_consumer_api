@@ -3,13 +3,12 @@
 namespace App\Console\Commands;
 
 use App\Models\Product;
-use App\Models\Service;
 use App\Models\Transaction;
 use App\Services\Payment\Status;
-use App\Services\Smobilpay\SmobilpayService;
+use App\Services\Smobilpay\SmobilpayScrapingService;
 use Illuminate\Console\Command;
 
-class PayWithSmobilpay extends Command
+class PayWithSmobilpayScraping extends Command
 {
     /**
      * The name and signature of the console command.
@@ -28,7 +27,7 @@ class PayWithSmobilpay extends Command
     /**
      * Execute the console command.
      */
-    public function handle(SmobilpayService $smobilpayService)
+    public function handle(SmobilpayScrapingService $smobilpayService): void
     {
         $start = microtime(true);
         $product = Product::where("name", "Crédit Blue/Camtel")->first();
@@ -42,7 +41,7 @@ class PayWithSmobilpay extends Command
 
         $result = $smobilpayService->initiate($transaction);
         $end = microtime(true);
-        dump(round($end - $start,2). " Seconds");
-        dd($result);
+        $this->line("Duration: " . round($end - $start, 2) . " Seconds");
+        $this->line(json_encode($result));
     }
 }

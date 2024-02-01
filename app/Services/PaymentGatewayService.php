@@ -41,7 +41,7 @@ class PaymentGatewayService implements TransactionServiceInterface, HandlesCallb
             "country" => "cm",
             "recipient" => "237{$transaction->destination}",
             "channel" => $transaction->product->provider_id_1,
-            "type" => $transaction->service->kind == ServiceKindEnum::payment ? "cash_collect" : "payout"
+            "type" => $transaction->service->getKind() == ServiceKindEnum::payment ? "cash_collect" : "payout"
         ];
         if(!empty($transaction->product->provider_id_2)) {
             $payload["service"] = $transaction->product->provider_id_2 ?? ""; 
@@ -74,7 +74,7 @@ class PaymentGatewayService implements TransactionServiceInterface, HandlesCallb
 
         $executedTx = $this->makeRequest()->put("/api/payment/{$uuid}", [
             "publicKey" => $this->publicKey,
-            "schema_type" => $transaction->service->kind == ServiceKindEnum::payment ? "CM_MOBILE_MONEY_SCHEMA" : "PHONE_NUMBER",
+            "schema_type" => $transaction->service->getKind() == ServiceKindEnum::payment ? "CM_MOBILE_MONEY_SCHEMA" : "PHONE_NUMBER",
             "schema" => [
                 "phoneNumber" => "237{$transaction->destination}"
             ]

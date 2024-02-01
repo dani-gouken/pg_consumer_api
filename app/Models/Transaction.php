@@ -17,14 +17,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $status_check_count
  * @property int $max_status_check
  * @property int $amount
- * @property Status $status
+ * @property Status|string $status
  * @property string|null $external_reference
  * @property string|null $secret
  * @property string|null $error
  * @property string|null $provider_error
  * @property string $destination
- * @property string|null $last_status_check_at
- * @property string|null $processed_at
+ * @property string|null|\DatetimeInterface $last_status_check_at
+ * @property string|null|\DatetimeInterface $processed_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Product|null $product
@@ -51,7 +51,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereUuid($value)
  * @property int|null $service_payment_id
- * @property string $kind
+ * @property string|TransactionKind $kind
  * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereKind($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereServicePaymentId($value)
  * @mixin \Eloquent

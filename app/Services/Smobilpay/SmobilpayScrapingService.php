@@ -12,7 +12,7 @@ use App\Services\Payment\TransactionServiceInterface;
 use Cache;
 use Log;
 
-class SmobilpayService implements TransactionServiceInterface
+class SmobilpayScrapingService implements TransactionServiceInterface
 {
     const AUTH_COOKIE_NAME = "smopamobilpay";
     use Client;

@@ -45,6 +45,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereUuid($value)
  * @property-read mixed $formatted_price
+ * @property bool $default
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereDefault($value)
  * @mixin \Eloquent
  */
 class Product extends Model
