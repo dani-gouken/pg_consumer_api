@@ -36,6 +36,7 @@ class TransactionProcessor implements TransactionProcessorInterface
         $transaction->service_id = $product->service_id;
         $transaction->status_check_count = 0;
         $transaction->kind = $kind->value;
+        $transaction->secret = Uuid::uuid4()->toString();
         $transaction->max_status_check = $this->maximumStatusCheck;
         if (!$product->fixed_price && is_null($amount)) {
             throw new TransactionInitFailureException("Amount is required for a product without a fixed price");

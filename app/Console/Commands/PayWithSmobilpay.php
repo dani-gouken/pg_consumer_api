@@ -5,17 +5,17 @@ namespace App\Console\Commands;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Services\Payment\Status;
-use App\Services\Smobilpay\SmobilpayScrapingService;
+use App\Services\Smobilpay\SmobilpayService;
 use Illuminate\Console\Command;
 
-class PayWithSmobilpayScraping extends Command
+class PayWithSmobilpay extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:pay-with-smobilpay-scraping';
+    protected $signature = 'app:pay-with-smobilpay';
 
     /**
      * The console command description.
@@ -27,16 +27,16 @@ class PayWithSmobilpayScraping extends Command
     /**
      * Execute the console command.
      */
-    public function handle(SmobilpayScrapingService $smobilpayService): void
+    public function handle(SmobilpayService $smobilpayService): void
     {
         $start = microtime(true);
-        $product = Product::where("name", "Crédit Blue/Camtel")->first();
+        $product = Product::where("name", "Collecte Orange Money")->first();
 
         $transaction = new Transaction;
 
         $transaction->amount = 100;
         $transaction->product()->associate($product);
-        $transaction->destination = "650675795";
+        $transaction->destination = "696163373";
         $transaction->status = Status::PENDING;
 
         $result = $smobilpayService->initiate($transaction);

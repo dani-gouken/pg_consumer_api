@@ -26,7 +26,7 @@ class ServicesSeeder extends Seeder
         $mtnMomo->uuid = Uuid::uuid4()->toString();
         // $mtnMomo->provider_id_1 = '20053';
         // $mtnMomo->provider_id_2 = 'CM_MTN_VTU_CASHOUT_OP';
-        $mtnMomo->provider_id_1 = 'CHANNEL_TEST';
+        $mtnMomo->provider_id_1 = 'S-112-949-MTNMOMO-20053-200050001-1';
         $mtnMomo->provider_id_2 = '';
         $mtnMomo->enabled = true;
         $mtnMomo->public = false;
@@ -35,7 +35,7 @@ class ServicesSeeder extends Seeder
         $mtnMomo->form_input_label = "Numéro MTN Mobile Money";
         $mtnMomo->form_input_placeholder = "ex: +237650675795";
         $mtnMomo->form_input_regex = "((|(0{2}))?237)?((67|650|651|652|653|654|680|681|682|683)([0-9]{6,7}))$";
-        $mtnMomo->provider = "pg";
+        $mtnMomo->provider = "smobilpay";
         $mtnMomo->save();
 
         $mtnMomoDebit = new Product;
@@ -45,7 +45,7 @@ class ServicesSeeder extends Seeder
         $mtnMomoDebit->default = true;
         // $mtnMomoDebit->provider_id_1 = '20053';
         // $mtnMomoDebit->provider_id_2 = 'CM_MTN_VTU_CASHOUT_OP';
-        $mtnMomoDebit->provider_id_1 = 'CHANNEL_TEST';
+        $mtnMomoDebit->provider_id_1 = 'S-112-949-MTNMOMO-20053-200050001-1';
         $mtnMomoDebit->provider_id_2 = '';
         $mtnMomoDebit->description = "Collecte MTN Mobile Money";
         $mtnMomoDebit->uuid = Uuid::uuid4();
@@ -61,8 +61,8 @@ class ServicesSeeder extends Seeder
         $orangeMoney->slug = Str::slug($orangeMoney->name);
         $orangeMoney->kind = ServiceKindEnum::payment->value;
         $orangeMoney->uuid = Uuid::uuid4()->toString();
-        $orangeMoney->provider_id_1 = '20053';
-        $orangeMoney->provider_id_2 = 'CM_MTN_VTU_CASHOUT_OP';
+        $orangeMoney->provider_id_1 = 'S-112-949-CMORANGEOM-30053-2006125105-1';
+        $orangeMoney->provider_id_2 = '';
         $orangeMoney->enabled = true;
         $orangeMoney->public = false;
         $orangeMoney->min_amount = 10;
@@ -70,7 +70,7 @@ class ServicesSeeder extends Seeder
         $orangeMoney->form_input_label = "Numéro Orange Money";
         $orangeMoney->form_input_placeholder = "ex: +23791080200";
         $orangeMoney->form_input_regex = "((|(0{2}))?237)?((69|655|656|657|658|659)([0-9]{6,7}))$";
-        $orangeMoney->provider = "pg";
+        $orangeMoney->provider = "smobilpay";
         $orangeMoney->save();
 
         $orangeMoneyDebit = new Product;
@@ -78,8 +78,8 @@ class ServicesSeeder extends Seeder
         $orangeMoneyDebit->color = "bg-black-900";
         $orangeMoneyDebit->name = "Collecte Orange Money";
         $orangeMoneyDebit->default = true;
-        $orangeMoneyDebit->provider_id_1 = '50053';
-        $orangeMoneyDebit->provider_id_2 = '900402';
+        $orangeMoneyDebit->provider_id_1 = 'S-112-949-CMORANGEOM-30053-2006125105-1';
+        $orangeMoneyDebit->provider_id_2 = '';
         $orangeMoneyDebit->description = "Collecte Orange Money";
         $orangeMoneyDebit->uuid = Uuid::uuid4();
         $orangeMoneyDebit->slug = Str::slug("orange-collect");
