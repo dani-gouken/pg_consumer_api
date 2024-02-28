@@ -12,5 +12,7 @@ cache:
 	${SAIL_BIN} artisan config:cache
 up:
 	${SAIL_BIN} up -d
+db:
+	php artisan migrate:fresh --seed
 down:
 	${SAIL_BIN} down --volumes

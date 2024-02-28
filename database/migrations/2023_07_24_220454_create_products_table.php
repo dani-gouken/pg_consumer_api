@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string("name");
             $table->string("description");
             $table->string("slug");
+            $table->string("tag")->nullable();
+            $table->boolean("promoted")->default(false);
+            $table->boolean("featured")->default(false);
             $table->boolean("default")->default(false);
             $table->string("provider_id_1")->nullable();
             $table->string("provider_id_2")->nullable();

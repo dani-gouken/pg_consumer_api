@@ -18,6 +18,7 @@ class ServiceResource extends JsonResource
         /** @var Service $service */
         $service = $this;
         return [
+            "uuid" => $service->uuid,
             "image" => \Vite::asset($service->logo_url),
             "name" => $service->name,
             "description" => $service->description,
