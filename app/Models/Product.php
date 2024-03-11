@@ -15,6 +15,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $uuid
  * @property string $color
  * @property string $name
+ * @property string $tag
+ * @property bool $promoted
+ * @property bool $featured
+ * @property string $name
  * @property string $description
  * @property string $slug
  * @property string|null $provider_id_1
@@ -45,6 +49,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereUuid($value)
  * @property-read mixed $formatted_price
+ * @property bool $default
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereDefault($value)
  * @mixin \Eloquent
  */
 class Product extends Model
@@ -53,7 +59,9 @@ class Product extends Model
 
     protected $casts = [
         "default" => "boolean",
-        "fixed_price" => "boolean"
+        "fixed_price" => "boolean",
+        "promoted" => "boolean",
+        "featured" => "boolean",
     ];
     public function service(): BelongsTo
     {

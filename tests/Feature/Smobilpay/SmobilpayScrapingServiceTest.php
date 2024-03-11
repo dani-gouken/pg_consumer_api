@@ -8,13 +8,13 @@ use App\Models\ServiceKindEnum;
 use App\Models\Transaction;
 use App\Services\Payment\TransactionResult;
 use App\Services\Payment\Status;
-use App\Services\Smobilpay\SmobilpayService;
+use App\Services\Smobilpay\SmobilpayScrapingService;
 use Illuminate\Http\Client\Request;
 use Tests\TestCase;
 use Http;
 use Cache;
 
-class SmobilpayServiceTest extends TestCase
+class SmobilpayScrapingServiceTest extends TestCase
 {
     public function setUp(): void {
         parent::setUp();
@@ -34,9 +34,9 @@ class SmobilpayServiceTest extends TestCase
      */
     public function test_payment_is_initiated(): void
     {
-        $baseUrl = config("smobilpay.baseUrl");
-        $username = config("smobilpay.username");
-        $password = config("smobilpay.password");
+        $baseUrl = config("smobilpay.scraping.baseUrl");
+        $username = config("smobilpay.scraping.username");
+        $password = config("smobilpay.scraping.password");
         $token = "6d876381f6fe229dfc3d25e75c9b98ce:3a852cfe2833661742a637a6eba2db92d9ccbdab";
         Http::fake([
             ...$this->login_simulations($token),
@@ -75,8 +75,8 @@ class SmobilpayServiceTest extends TestCase
             "*" => Http::response(status: 500)
         ]);
 
-        /** @var SmobilpayService */
-        $smobil = $this->app->get(SmobilpayService::class);
+        /** @var SmobilpayScrapingService */
+        $smobil = $this->app->get(SmobilpayScrapingService::class);
 
         $service = new Service;
         $service->name = "MTN Mobile Money Collection";
@@ -85,7 +85,7 @@ class SmobilpayServiceTest extends TestCase
         
         
         $product = new Product;
-        $product->service = $service;
+        $product->service()->associate($service);
         $product->provider_id_1 = 'some_external_id_1';
         $product->provider_id_2 = 'some_external_id_1';
         $product->color = "yellow";
@@ -98,7 +98,7 @@ class SmobilpayServiceTest extends TestCase
         
 
         $transaction->amount = 50;
-        $transaction->product = $product;
+        $transaction->product()->associate($product);
         $transaction->destination = "650675795";
 
         $result = $smobil->initiate($transaction);
@@ -161,13 +161,14 @@ class SmobilpayServiceTest extends TestCase
         $transaction = new Transaction;
         $transaction->external_reference = "some_reference";
         $transaction->status = Status::PENDING->value;
+
         Http::fake([
             ...$this->login_simulations("some_token"),
             ...$this->status_check_simulations($transaction),
             "*" => Http::response(status: 500)
         ]);
-        /** @var SmobilpayService */
-        $smobil = $this->app->get(SmobilpayService::class);
+        /** @var SmobilpayScrapingService */
+        $smobil = $this->app->get(SmobilpayScrapingService::class);
 
         $status = $smobil->checkStatus($transaction);
         $this->assertEquals(
@@ -191,8 +192,8 @@ class SmobilpayServiceTest extends TestCase
             ...$this->status_check_simulations($transaction),
             "*" => Http::response(status: 500)
         ]);
-        /** @var SmobilpayService */
-        $smobil = $this->app->get(SmobilpayService::class);
+        /** @var SmobilpayScrapingService */
+        $smobil = $this->app->get(SmobilpayScrapingService::class);
         $smobil->checkStatus($transaction);
     }
 

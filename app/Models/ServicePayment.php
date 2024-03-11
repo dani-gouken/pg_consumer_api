@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $id
  * @property int|null $credit_transaction_id
  * @property int|null $debit_transaction_id
- * @property string $status
+ * @property ServicePaymentStatusEnum|string $status
  * @property int $product_id
  * @property int $service_id
  * @property string|null $notification_email
@@ -47,6 +47,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|ServicePayment whereDebitDestination($value)
  * @property int $payment_service_id
  * @method static \Illuminate\Database\Eloquent\Builder|ServicePayment wherePaymentServiceId($value)
+ * @property string $uuid
+ * @property string $code
+ * @property-read string $formatted_amount
+ * @property-read \App\Models\Service|null $paymentService
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicePayment whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicePayment whereUuid($value)
  * @mixin \Eloquent
  */
 class ServicePayment extends Model
@@ -56,7 +62,7 @@ class ServicePayment extends Model
     protected $attributes = [
         "status" => ServicePaymentStatusEnum::draft->value
     ];
-    
+
     protected $casts = [
         "status" => ServicePaymentStatusEnum::class
     ];
@@ -81,10 +87,11 @@ class ServicePayment extends Model
 
     public function getFormattedAmountAttribute(): string
     {
-        return number_format($this->amount, 0, ",", " ") . " FCFA";
+        return number_format((int) $this->amount, 0, ",", " ") . " FCFA";
     }
 
-    public static function findByCodeOrFail(string $code) {
+    public static function findByCodeOrFail(string $code)
+    {
         return self::where("code", $code)->firstOrFail();
     }
 

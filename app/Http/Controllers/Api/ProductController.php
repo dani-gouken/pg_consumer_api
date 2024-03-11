@@ -18,7 +18,7 @@ class ProductController extends Controller
         $product = Product::findByEnabledUuidOrFail($uuid);
         $service = $product->service;
         $this->authorize("viewProducts", $service);
-        if (!$service->fixed_amount) {
+        if (!$product->fixed_price) {
             $request->validate([
                 "amount" => ["required", "min:{$service->min_amount}", "max:{$service->max_amount}", "integer"]
             ]);

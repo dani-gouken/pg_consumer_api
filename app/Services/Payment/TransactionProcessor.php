@@ -36,6 +36,7 @@ class TransactionProcessor implements TransactionProcessorInterface
         $transaction->service_id = $product->service_id;
         $transaction->status_check_count = 0;
         $transaction->kind = $kind->value;
+        $transaction->secret = Uuid::uuid4()->toString();
         $transaction->max_status_check = $this->maximumStatusCheck;
         if (!$product->fixed_price && is_null($amount)) {
             throw new TransactionInitFailureException("Amount is required for a product without a fixed price");
@@ -128,7 +129,6 @@ class TransactionProcessor implements TransactionProcessorInterface
             Status::PENDING => $transaction->pending($isStatusCheck),
             Status::ERROR => $transaction->error($result->error, $result->providerError),
             Status::SUCCESS => $transaction->success(),
-            default => throw new \UnexpectedValueException(sprintf("Unhandled status %s", $result->status))
         };
         $tx->save();
         if ($tx->status->pending()) {
@@ -164,12 +164,13 @@ class TransactionProcessor implements TransactionProcessorInterface
         try {
             $service = $this->resolver->resolve($serviceName);
         } catch (\Exception $e) {
-            Log::warning("callback: service not found", ["message" => $e->getMessage(), "service" => $service]);
+            Log::warning("callback: service not found", ["message" => $e->getMessage(), "serviceName" => $serviceName]);
             return $nothing;
         }
         if (!($service instanceof HandlesCallback)) {
             Log::warning("callback: tx service does not support callback", ["service" => $service]);
         }
+        /** @var HandlesCallback|TransactionServiceInterface $service */
         if (!$service->isValidCallback($request)) {
             Log::warning("callback: request not valid");
             return $nothing;

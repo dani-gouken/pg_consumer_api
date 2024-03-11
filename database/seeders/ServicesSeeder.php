@@ -26,7 +26,7 @@ class ServicesSeeder extends Seeder
         $mtnMomo->uuid = Uuid::uuid4()->toString();
         // $mtnMomo->provider_id_1 = '20053';
         // $mtnMomo->provider_id_2 = 'CM_MTN_VTU_CASHOUT_OP';
-        $mtnMomo->provider_id_1 = 'CHANNEL_TEST';
+        $mtnMomo->provider_id_1 = 'S-112-949-MTNMOMO-20053-200050001-1';
         $mtnMomo->provider_id_2 = '';
         $mtnMomo->enabled = true;
         $mtnMomo->public = false;
@@ -35,7 +35,7 @@ class ServicesSeeder extends Seeder
         $mtnMomo->form_input_label = "Numéro MTN Mobile Money";
         $mtnMomo->form_input_placeholder = "ex: +237650675795";
         $mtnMomo->form_input_regex = "((|(0{2}))?237)?((67|650|651|652|653|654|680|681|682|683)([0-9]{6,7}))$";
-        $mtnMomo->provider = "pg";
+        $mtnMomo->provider = "smobilpay";
         $mtnMomo->save();
 
         $mtnMomoDebit = new Product;
@@ -45,7 +45,7 @@ class ServicesSeeder extends Seeder
         $mtnMomoDebit->default = true;
         // $mtnMomoDebit->provider_id_1 = '20053';
         // $mtnMomoDebit->provider_id_2 = 'CM_MTN_VTU_CASHOUT_OP';
-        $mtnMomoDebit->provider_id_1 = 'CHANNEL_TEST';
+        $mtnMomoDebit->provider_id_1 = 'S-112-949-MTNMOMO-20053-200050001-1';
         $mtnMomoDebit->provider_id_2 = '';
         $mtnMomoDebit->description = "Collecte MTN Mobile Money";
         $mtnMomoDebit->uuid = Uuid::uuid4();
@@ -61,8 +61,8 @@ class ServicesSeeder extends Seeder
         $orangeMoney->slug = Str::slug($orangeMoney->name);
         $orangeMoney->kind = ServiceKindEnum::payment->value;
         $orangeMoney->uuid = Uuid::uuid4()->toString();
-        $orangeMoney->provider_id_1 = '20053';
-        $orangeMoney->provider_id_2 = 'CM_MTN_VTU_CASHOUT_OP';
+        $orangeMoney->provider_id_1 = 'S-112-949-CMORANGEOM-30053-2006125105-1';
+        $orangeMoney->provider_id_2 = '';
         $orangeMoney->enabled = true;
         $orangeMoney->public = false;
         $orangeMoney->min_amount = 10;
@@ -70,7 +70,7 @@ class ServicesSeeder extends Seeder
         $orangeMoney->form_input_label = "Numéro Orange Money";
         $orangeMoney->form_input_placeholder = "ex: +23791080200";
         $orangeMoney->form_input_regex = "((|(0{2}))?237)?((69|655|656|657|658|659)([0-9]{6,7}))$";
-        $orangeMoney->provider = "pg";
+        $orangeMoney->provider = "smobilpay";
         $orangeMoney->save();
 
         $orangeMoneyDebit = new Product;
@@ -78,8 +78,8 @@ class ServicesSeeder extends Seeder
         $orangeMoneyDebit->color = "bg-black-900";
         $orangeMoneyDebit->name = "Collecte Orange Money";
         $orangeMoneyDebit->default = true;
-        $orangeMoneyDebit->provider_id_1 = '50053';
-        $orangeMoneyDebit->provider_id_2 = '900402';
+        $orangeMoneyDebit->provider_id_1 = 'S-112-949-CMORANGEOM-30053-2006125105-1';
+        $orangeMoneyDebit->provider_id_2 = '';
         $orangeMoneyDebit->description = "Collecte Orange Money";
         $orangeMoneyDebit->uuid = Uuid::uuid4();
         $orangeMoneyDebit->slug = Str::slug("orange-collect");
@@ -194,7 +194,7 @@ class ServicesSeeder extends Seeder
         $blueAirtime->description = "Acheter de crédit de communication";
         $blueAirtime->uuid = Uuid::uuid4();
         $blueAirtime->slug = 'credit';
-        $blueAirtime->provider_id_1 = 'CHANNEL_CAMTEL';
+        $blueAirtime->provider_id_1 = 'CHANNEL_CAMTEL_TEST';
         $blueAirtime->provider_id_2 = '';
         $blueAirtime->fixed_price = false;
         $blueAirtime->price = null;
@@ -205,155 +205,176 @@ class ServicesSeeder extends Seeder
             [
                 "name" => "Blue GO S",
                 "provider_id_2" => "BLUE_GO_S",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 2_000,
                 "description" => "300 Mo/Jour",
+                "tag" => 'daily',
                 "color" => "bg-gray-800"
             ],
             [
                 "name" => "Blue GO M",
                 "provider_id_2" => "BLUE_GO_M",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 5_000,
                 "description" => "850 Mo/Jour",
+                "tag" => 'daily',
                 "color" => "bg-gray-800"
             ],
             [
                 "name" => "Blue GO L",
                 "provider_id_2" => "BLUE_GO_L",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 10_000,
                 "description" => "2 Go/Jour",
+                "tag" => 'daily',
                 "color" => "bg-gray-800"
             ],
             [
                 "name" => "Blue GO XL",
                 "provider_id_2" => "BLUE_GO_XL",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 20_000,
                 "description" => "4.5 Go/Jour",
+                "tag" => 'daily',
                 "color" => "bg-gray-800"
             ],
             [
                 "name" => "Blue GO XXL",
                 "provider_id_2" => "BLUE_GO_XXL",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 35_000,
                 "description" => "8 Go/Jour",
+                "tag" => 'daily',
                 "color" => "bg-gray-800"
             ],
             [
                 "name" => "Blue GO Plus S",
                 "provider_id_2" => "BLUE_GO_PLUS_S",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 15_000,
                 "description" => "60 Go/30 jours",
+                "tag" => "monthly", 
                 "color" => "bg-gray-800"
             ],
             [
                 "name" => "Blue GO Plus M",
                 "provider_id_2" => "BLUE_GO_PLUS_M",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 25_000,
                 "description" => "135 Go/30 jours",
+                "tag" => "monthly", 
                 "color" => "bg-gray-800"
             ],
             [
                 "name" => "Blue GO Plus L",
                 "provider_id_2" => "BLUE_GO_PLUS_L",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 40_000,
                 "description" => "240 Go/30 jours",
+                "tag" => "monthly", 
                 "color" => "bg-gray-800"
             ],
 
             [
                 "name" => "Blue Night",
                 "provider_id_2" => "BLUE_NIGHT",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 250,
                 "description" => "5 Go/22h-06h",
+                "tag" => "daily",
                 "color" => "bg-gray-800"
             ],
             [
                 "name" => "Blue One S",
                 "provider_id_2" => "BLUE_ONE_S",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 2_000,
                 "description" => "Whatsapp, Facebook Télégram, Twitter + 4Go / 1 semaine",
+                "tag" => "weekly",
                 "color" => "bg-gray-800"
             ],
             [
                 "name" => "Blue One M",
                 "provider_id_2" => "BLUE_ONE_M",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 3_000,
+                "promoted" => true,
+                "featured" => true,
                 "description" => "Whatsapp, Facebook Télégram, Twitter + 5Go / 30 jours",
+                "tag" => "monthly", 
                 "color" => "bg-gray-800"
             ],
             [
                 "name" => "Blue One L",
                 "provider_id_2" => "BLUE_ONE_L",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 5_000,
                 "description" => "Whatsapp, Facebook, Télégram, Twitter, Instagram + 8 Go / 30 jours",
+                "tag" => "monthly", 
                 "color" => "bg-gray-800"
             ],
             [
                 "name" => "Blue One XL",
                 "provider_id_2" => "BLUE_ONE_XL",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 10_000,
                 "description" => "Whatsapp, Facebook, Télégram, Twitter, Instagram , Youtube + 20 Go / 30 jours",
+                "tag" => "monthly", 
                 "color" => "bg-gray-800"
             ],
             [
                 "name" => "Blue One XXL",
                 "provider_id_2" => "BLUE_ONE_XXL",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 20_000,
                 "description" => "Whatsapp, Facebook, Télégram, Twitter, Instagram , Youtube, Netflix + 50 Go / 30 jours",
+                "tag" => "monthly", 
                 "color" => "bg-gray-800"
             ],
 
             [
                 "name" => "Blue Mo S",
                 "provider_id_2" => "BLUE_MO_S",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 100,
                 "description" => "1 Go / 3 heures",
+                "tag" => "daily",
                 "color" => "bg-gray-800"
             ],
             [
                 "name" => "Blue Mo M",
                 "provider_id_2" => "BLUE_MO_M",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 300,
                 "description" => "1.5 Go / Jour",
+                "tag" => "daily",
                 "color" => "bg-gray-800"
             ],
             [
                 "name" => "Blue Mo L",
                 "provider_id_2" => "BLUE_MO_L",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 500,
                 "description" => "2Go / 2 Jours",
+                "tag" => "daily",
                 "color" => "bg-gray-800"
             ],
             [
                 "name" => "Blue Mo XL",
                 "provider_id_2" => "BLUE_MO_XL",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 1000,
                 "description" => "2Go / 7 jours",
+                "tag" => "weekly",
                 "color" => "bg-gray-800"
             ],
             [
                 "name" => "Blue Mo XXL",
                 "provider_id_2" => "BLUE_MO_XXL",
-                "provider_id_1" => "CHANNEL_CAMTEL",
+                "provider_id_1" => "CHANNEL_CAMTEL_TEST",
                 "price" => 5000,
-                "description" => "10Go / 1 month",
+                "description" => "10Go / 30 jours",
+                "tag" => "monthly",
                 "color" => "bg-gray-800"
             ],
         ];
@@ -367,6 +388,9 @@ class ServicesSeeder extends Seeder
             $product->provider_id_1 = $data["provider_id_1"];
             $product->provider_id_2 = $data["provider_id_2"];
             $product->uuid = Uuid::uuid4();
+            $product->tag = $data['tag'];
+            $product->featured = $data['featured'] ?? false;
+            $product->promoted = $data['promoted'] ?? false;
             $product->slug = Str::slug($data["name"]);
             $product->fixed_price = true;
             $product->price = $data["price"];

@@ -60,6 +60,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Service whereFormInputLabel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Service whereFormInputPlaceholder($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Service whereFormInputRegex($value)
+ * @property-read string $logo_url
  * @mixin \Eloquent
  */
 class Service extends Model
@@ -93,7 +94,7 @@ class Service extends Model
     }
 
     /**
-     * @return Collection<Product>
+     * @return Collection<int, Product|Model>
      */
     public function enabledProducts(): Collection
     {
@@ -110,9 +111,6 @@ class Service extends Model
             ->get();
     }
 
-    /**
-     * @return Collection<self>
-     */
     public static function publicEnabledQuery(): Builder
     {
         return Service::where("enabled", "=", true)
@@ -151,5 +149,12 @@ class Service extends Model
     public function getLogoUrlAttribute(): string
     {
         return "resources/images/logos/{$this->image}";
+    }
+
+    public function getKind(): ServiceKindEnum
+    {
+        /** @var ServiceKindEnum */
+        $kind = $this->kind;
+        return $kind;
     }
 }

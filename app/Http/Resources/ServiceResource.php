@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,18 +15,21 @@ class ServiceResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        /** @var Service $service */
+        $service = $this;
         return [
-            "image" => \Vite::asset($this->logo_url),
-            "name" => $this->name,
-            "description" => $this->description,
-            "kind" => $this->kind,
-            "enabled" => $this->enabled,
-            "min_amount" => $this->min_amount,
-            "form_input_label" => $this->form_input_label,
-            "form_input_placeholder" => $this->form_input_placeholder,
-            "form_input_regex" => $this->form_input_regex,
-            "max_amount" => $this->max_amount,
-            "products" => ProductResource::collection($this->whenLoaded("products"))
+            "uuid" => $service->uuid,
+            "image" => \Vite::asset($service->logo_url),
+            "name" => $service->name,
+            "description" => $service->description,
+            "kind" => $service->kind,
+            "enabled" => $service->enabled,
+            "min_amount" => $service->min_amount,
+            "form_input_label" => $service->form_input_label,
+            "form_input_placeholder" => $service->form_input_placeholder,
+            "form_input_regex" => $service->form_input_regex,
+            "max_amount" => $service->max_amount,
+            "products" => ProductResource::collection($service->whenLoaded("products")) // @phpstan-ignore-line
         ];
     }
 }

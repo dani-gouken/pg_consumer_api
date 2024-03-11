@@ -18,9 +18,9 @@ trait Client
             ->withOptions([
                 'allow_redirects' => false,
             ]);
-        if (!is_null($pendingRequest)) {
+        if (!is_null($token)) {
             $pendingRequest = $pendingRequest->withCookies(
-                [SmobilpayService::AUTH_COOKIE_NAME => $token],
+                [SmobilpayScrapingService::AUTH_COOKIE_NAME => $token],
                 ".smobilpay.com"
             );
         }

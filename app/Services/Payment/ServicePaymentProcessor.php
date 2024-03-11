@@ -120,6 +120,10 @@ class ServicePaymentProcessor implements ServicePaymentProcessorInterface
         if (!$product->fixed_price && is_null($amount)) {
             throw new TransactionInitFailureException("Amount is required for a product without a fixed price");
         }
+        $price = $product->fixed_price ? $product->price : $amount;
+        if(($price == null) || ($price <= 0)) {
+            throw new TransactionInitFailureException("A valid price is required");
+        }
         $random = new Randomizer;
         $servicePayment = new ServicePayment;
         $servicePayment->uuid = Uuid::uuid4()->toString();
@@ -129,7 +133,7 @@ class ServicePaymentProcessor implements ServicePaymentProcessorInterface
         $servicePayment->payment_service_id = $paymentService->id;
         $servicePayment->credit_destination = $creditDestination;
         $servicePayment->debit_destination = $debitDestination;
-        $servicePayment->amount = $product->fixed_price ? $product->price : $amount;
+        $servicePayment->amount = (string)$price;
 
         $servicePayment->customer_name = $customerName;
         $servicePayment->notification_email = $notificationEmail;
