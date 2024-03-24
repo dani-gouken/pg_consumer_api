@@ -76,7 +76,7 @@ class PaymentGatewayService implements TransactionServiceInterface, HandlesCallb
             "publicKey" => $this->publicKey,
             "schema_type" => $transaction->service->getKind() == ServiceKindEnum::payment ? "CM_MOBILE_MONEY_SCHEMA" : "PHONE_NUMBER",
             "schema" => [
-                "phoneNumber" => $transaction->service->getKind() == ServiceKindEnum::payment ? "237{$transaction->destination}" : $transaction->destination
+                "phoneNumber" => "237{$transaction->destination}"
             ]
         ]);
 
