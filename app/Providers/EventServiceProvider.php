@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Events\TransactionCompleted;
+use App\Listeners\LogRequestSending;
 use App\Listeners\TransactionCompletedListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Http\Client\Events\RequestSending;
 use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
@@ -22,7 +24,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         TransactionCompleted::class => [
             TransactionCompletedListener::class
-        ]
+        ],
+        RequestSending::class => [
+            LogRequestSending::class,
+        ],
     ];
 
     /**

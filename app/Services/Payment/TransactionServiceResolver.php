@@ -2,10 +2,10 @@
 
 namespace App\Services\Payment;
 
+use App\Services\FujisatService;
 use App\Services\PaymentGatewayService;
 use App\Services\Smobilpay\SmobilpayScrapingService;
 use App\Services\Smobilpay\SmobilpayService;
-use FujisatService;
 
 class TransactionServiceResolver implements TransactionServiceResolverInterface
 {

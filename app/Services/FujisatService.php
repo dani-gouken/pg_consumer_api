@@ -1,11 +1,17 @@
 <?php
-use App\Models\ServiceKindEnum;
+namespace App\Services;
+
 use App\Models\Transaction;
 use App\Services\Payment\Status;
 use App\Services\Payment\TransactionResult;
 use App\Services\Payment\TransactionServiceInterface;
 use Carbon\Carbon;
 use Log;
+use Cache;
+use Http;
+use Exception;
+use LogicException;
+use Throwable;
 
 class FujisatService implements TransactionServiceInterface
 {

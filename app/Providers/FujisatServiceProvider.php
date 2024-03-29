@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use FujisatService;
+use App\Services\FujisatService;
 use Illuminate\Support\ServiceProvider;
 
 class FujisatServiceProvider extends ServiceProvider
@@ -15,7 +15,7 @@ class FujisatServiceProvider extends ServiceProvider
         $this->app->bind(
             FujisatService::class,
             fn() => new FujisatService(
-                config('fujisat.base_url'),
+                config('fujisat.baseUrl'),
                 config('fujisat.username'),
                 config('fujisat.password'),
             )

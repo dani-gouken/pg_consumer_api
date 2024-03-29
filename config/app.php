@@ -1,5 +1,6 @@
 <?php
 
+use App\Providers\FujisatServiceProvider;
 use App\Providers\PaymentGatewayServiceServiceProvider;
 use App\Providers\SmobilpayServiceProvider;
 use Illuminate\Support\Facades\Facade;
@@ -166,6 +167,7 @@ return [
          * Application Service Providers...
          */
         SmobilpayServiceProvider::class,
+        FujisatServiceProvider::class,
         PaymentGatewayServiceServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,

@@ -113,7 +113,7 @@ class ServicesSeeder extends Seeder
         $canalPlus->provider_id_2 = 'CM_MTN_VTU_CASHOUT_OP';
         $canalPlus->enabled = true;
         $canalPlus->public = true;
-        $canalPlus->provider = "pg";
+        $canalPlus->provider = "fujisat";
         $canalPlus->save();
 
         $canalPlusProducts = [
