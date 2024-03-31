@@ -22,7 +22,7 @@
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                     <x-input :label="$service->form_input_label" type="text" name="credit_destination" required
                         pattern="{{ $service->form_input_regex }}" :placeholder="$service->form_input_placeholder" class="mt-4" />
-                    @if (!$service->fixed_price)
+                    @if (!$product->fixed_price)
                         <x-input
                             min='{{ $service->min_amount }}'
                             max='{{ $service->max_amount }}'
