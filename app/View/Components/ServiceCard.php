@@ -14,6 +14,7 @@ class ServiceCard extends Component
     public function __construct(
         public string $description = '',
         public string $title = '',
+        public string $subtitle = '',
         public string $image = "",
         public string $action = "",
         public bool $imgSmall = false,
