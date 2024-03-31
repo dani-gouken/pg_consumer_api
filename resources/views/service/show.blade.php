@@ -10,14 +10,18 @@
                     <a href="{{ route('payment.create', ['product' => $product->slug, 'service' => $service->slug]) }}"
                         class="btn btn-primary w-full">Choisir</a>
                 </x-slot:action>
+                <x-slot:subtitle>
+                    @if ($product->fixed_price)
+                        {{ $product->formatted_price }} FCFA
+                    @endif
+                </x-slot:subtitle>
             </x-service-card>
         @endforeach
     </div>
 @endsection
 
 @section('navbar-center')
-    <img src="{{ Vite::asset("resources/images/logos/{$service->image}") }}" class="w-32"
-        alt="{{ $service->name }} logo" />
+    <img src="{{ Vite::asset("resources/images/logos/{$service->image}") }}" class="w-32" alt="{{ $service->name }} logo" />
 @endsection
 
 @section('navbar-end')
