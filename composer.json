@@ -10,7 +10,7 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
-        "livewire/livewire": "^2.12",
+        "livewire/livewire": "^3.0",
         "maviance/smobilpay-php": "^2.2"
     },
     "require-dev": {
@@ -34,7 +34,8 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+        "files": ["helpers.php"]
     },
     "scripts": {
         "post-autoload-dump": [

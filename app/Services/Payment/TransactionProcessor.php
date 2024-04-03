@@ -4,6 +4,7 @@ namespace App\Services\Payment;
 
 use App\Events\TransactionCompleted;
 use App\Jobs\StatusCheck;
+use App\Models\Option;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\TransactionKind;
@@ -18,6 +19,7 @@ class TransactionProcessor implements TransactionProcessorInterface
 
     public function __construct(
         private TransactionServiceResolverInterface $resolver,
+
         private int $delayBetweenStatusCheck = 10,
         private int $maximumStatusCheck = 25,
     ) {
@@ -28,7 +30,7 @@ class TransactionProcessor implements TransactionProcessorInterface
         Product $product,
         string $destination,
         TransactionKind $kind,
-        ?int $amount = null,
+        int $amount = null
     ): Transaction {
         $transaction = new Transaction;
         $transaction->uuid = Uuid::uuid4()->toString();
@@ -38,11 +40,9 @@ class TransactionProcessor implements TransactionProcessorInterface
         $transaction->kind = $kind->value;
         $transaction->secret = Uuid::uuid4()->toString();
         $transaction->max_status_check = $this->maximumStatusCheck;
-        if (!$product->fixed_price && is_null($amount)) {
-            throw new TransactionInitFailureException("Amount is required for a product without a fixed price");
-        }
         $service = $product->service;
-        $transaction->amount = $product->fixed_price ? $product->price : $amount;
+        $transaction->amount = $amount;
+
         if ($service->min_amount && ($transaction->amount < $service->min_amount)) {
             throw new TransactionInitFailureException("Minimum amount allowed by the service is [{$service->min_amount}");
         }
@@ -185,11 +185,11 @@ class TransactionProcessor implements TransactionProcessorInterface
             Log::warning("callback: unable to retrieve tx result");
             return $nothing;
         }
-        if(!$result->status->isFinal()) {
+        if (!$result->status->isFinal()) {
             Log::warning("callback: non-final status received");
             return $nothing;
         }
-        $this->handlePaymentResult($tx, $result,isStatusCheck: true);
+        $this->handlePaymentResult($tx, $result, isStatusCheck: true);
         return $nothing;
     }
 

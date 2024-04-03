@@ -157,4 +157,14 @@ class Service extends Model
         $kind = $this->kind;
         return $kind;
     }
+
+    public function options(): HasMany
+    {
+        return $this->hasMany(Option::class);
+    }
+
+    public function getSearchableAttribute(): bool
+    {
+        return $this->kind == ServiceKindEnum::bill;
+    }
 }

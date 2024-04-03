@@ -28,6 +28,10 @@ class PaymentController extends Controller
         $service = Service::findPubliclyUsableBySlugOrFail($serviceSlug);
         $product = $service->enabledProductsQuery()->where("slug", "=", $productSlug)->firstOrFail();
 
+        if ($service->kind == ServiceKindEnum::bill && !$product->fixed_price) {
+            return redirect()->route('search.create', [$service->slug, $product->slug]);
+        }
+
         $paymentServices = Service::ofKindQuery(ServiceKindEnum::payment)->get();
         return view("payment.create", compact("product", "service", "paymentServices"));
     }
@@ -55,7 +59,7 @@ class PaymentController extends Controller
             $paymentService,
             debitDestination: $request->get("debit_destination"),
             creditDestination: $request->get("credit_destination"),
-            amount: $request->get("amount")
+            amount: $request->get("amount"),
         );
         $payment->save();
         $paymentProcessor->init($payment, $request->get("amount"));

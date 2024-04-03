@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,3 +23,6 @@ Route::get("/{service}", [ServiceController::class, "show"])->name("services.sho
 Route::get("/payment/{payment:code}", [PaymentController::class, "show"])->name("payment.show");
 Route::get("/{service}/{product}/payment", [PaymentController::class, "create"])->name("payment.create");
 Route::post("/{service}/{product}/payment", [PaymentController::class, "store"])->name("payment.store");
+
+Route::get("/{service}/{product}/search", [SearchController::class, "create"])->name("search.create");
+Route::post("/{service}/{product}/search", [SearchController::class, "store"])->name("search.store");

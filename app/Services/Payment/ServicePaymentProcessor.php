@@ -18,6 +18,7 @@ class ServicePaymentProcessor implements ServicePaymentProcessorInterface
 {
     public function __construct(
         private TransactionProcessorInterface $processor,
+        private AmountServiceInterface $amountService,
     ) {
     }
 
@@ -26,12 +27,19 @@ class ServicePaymentProcessor implements ServicePaymentProcessorInterface
         $servicePayment->status = ServicePaymentStatusEnum::debitPending;
         $servicePayment->save();
         $product = $servicePayment->paymentService->defaultProduct();
+
+        $amount = $this->amountService->getAmount($servicePayment->product, $servicePayment->options, $amount);
+
+        if (is_null($amount)) {
+            throw new TransactionInitFailureException("Amount is required for a product without a fixed price");
+        }
+
         try {
             $debitTx = $this->processor->createTransaction(
                 $product,
                 $servicePayment->debit_destination,
                 TransactionKind::debit,
-                $amount ?? $product->price,
+                $amount,
             );
             $debitTx->service_payment_id = $servicePayment->id;
             $debitTx->save();
@@ -59,7 +67,7 @@ class ServicePaymentProcessor implements ServicePaymentProcessorInterface
                 $product,
                 $servicePayment->credit_destination,
                 TransactionKind::credit,
-                $tx->amount ?? $product->price,
+                $tx->amount,
             );
             $creditTx->service_payment_id = $servicePayment->id;
             $creditTx->save();
@@ -121,7 +129,7 @@ class ServicePaymentProcessor implements ServicePaymentProcessorInterface
             throw new TransactionInitFailureException("Amount is required for a product without a fixed price");
         }
         $price = $product->fixed_price ? $product->price : $amount;
-        if(($price == null) || ($price <= 0)) {
+        if (($price == null) || ($price <= 0)) {
             throw new TransactionInitFailureException("A valid price is required");
         }
         $random = new Randomizer;
@@ -133,7 +141,7 @@ class ServicePaymentProcessor implements ServicePaymentProcessorInterface
         $servicePayment->payment_service_id = $paymentService->id;
         $servicePayment->credit_destination = $creditDestination;
         $servicePayment->debit_destination = $debitDestination;
-        $servicePayment->amount = (string)$price;
+        $servicePayment->amount = (string) $price;
 
         $servicePayment->customer_name = $customerName;
         $servicePayment->notification_email = $notificationEmail;

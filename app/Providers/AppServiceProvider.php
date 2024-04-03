@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\Payment\AmountService;
+use App\Services\Payment\AmountServiceInterface;
 use App\Services\Payment\ServicePaymentProcessor;
 use App\Services\Payment\ServicePaymentProcessorInterface;
 use App\Services\Payment\TransactionProcessor;
@@ -25,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
             maximumStatusCheck: config("payment.status_check.max", 60),
         ));
         $this->app->bind(ServicePaymentProcessorInterface::class, ServicePaymentProcessor::class);
+        $this->app->bind(AmountServiceInterface::class, AmountService::class);
 
     }
 

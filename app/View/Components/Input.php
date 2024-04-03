@@ -20,6 +20,9 @@ class Input extends Component
         public string $min = "",
         public string $type = "text",
         public bool $required = false,
+        public bool $disabled = false,
+        public bool $readonly = false,
+        public bool $center = false,
         public string $pattern = "",
     )
     {

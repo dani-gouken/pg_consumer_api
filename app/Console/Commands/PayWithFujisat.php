@@ -36,7 +36,7 @@ class PayWithFujisat extends Command
 
         $transaction->amount = 100;
         $transaction->product()->associate($product);
-        $transaction->destination = "696163373";
+        $transaction->destination = "24210020243144";
         $transaction->status = Status::PENDING;
 
         $result = $fujisatService->initiate($transaction);

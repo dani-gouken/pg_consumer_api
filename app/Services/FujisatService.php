@@ -1,7 +1,12 @@
 <?php
 namespace App\Services;
 
+use App\Models\Option;
+use App\Models\Product;
+use App\Models\Service;
 use App\Models\Transaction;
+use App\Services\Payment\HandlesSearch;
+use App\Services\Payment\SearchResult;
 use App\Services\Payment\Status;
 use App\Services\Payment\TransactionResult;
 use App\Services\Payment\TransactionServiceInterface;
@@ -13,7 +18,7 @@ use Exception;
 use LogicException;
 use Throwable;
 
-class FujisatService implements TransactionServiceInterface
+class FujisatService implements TransactionServiceInterface, HandlesSearch
 {
     const FUJISAT_TOKEN_KEY = "FUJISAT_TOKEN";
     public function __construct(
@@ -53,11 +58,11 @@ class FujisatService implements TransactionServiceInterface
             "numabo" => $numAbo,
             "numdecabo" => $transaction->destination,
             "numcontrat" => "1",
-            "offreCode" => "EVDD",
+            "offreCode" => $transaction->product->provider_id_1,
             "duree" => 1,
             "amount" => $transaction->amount,
             "telephone" => "",
-            "option" => []
+            "option" => $transaction->servicePayment->options->pluck('code')
         ]);
         $data = $res->json();
         if (!$data) {
@@ -101,7 +106,7 @@ class FujisatService implements TransactionServiceInterface
             "emailabo" => "",
             "telabo" => ""
         ]);
-        Log::info("[FUJISAT] auth response", ["body" => $res->body(), "status" => $res->status()]);
+        Log::info("[FUJISAT] subscriber response", ["body" => $res->body(), "status" => $res->status()]);
         $data = $res->json();
         if ($res->failed()) {
             Log::warning(
@@ -117,13 +122,83 @@ class FujisatService implements TransactionServiceInterface
             );
             throw new \Exception("Failed to generate a new token");
         }
+
         if (!array_key_exists("data", $data)) {
             throw new \Exception($res, "invalid response received from client search endpoint");
         }
-        if (!array_key_exists("numabo", $data['data'])) {
+
+        $data = $data['data'];
+
+        if (empty($data)) {
+            throw new \Exception($res, "num abo not found");
+        }
+
+        $data = $data[0];
+
+        if (!array_key_exists("numabo", $data)) {
             throw new Exception("invalid response, missing numabo");
         }
-        return $data['data']['numabo'];
+        return $data['numabo'];
+    }
+
+    /**
+     * @return array<{product:Product,options:Option}>
+     */
+    public function getProducts(Service $service): array
+    {
+        $token = $this->getToken();
+        $req = $this->makeRequest($token)->get('/operations/offers');
+        Log::info("[FUJISAT] auth response", ["body" => $req->body(), "status" => $req->getStatusCode()]);
+        $data = $req->json();
+        if ($req->failed()) {
+            Log::info("[FUJISAT] options request failed", ["body" => $req->body(), "status" => $req->getStatusCode()]);
+            return [];
+        }
+        if (!array_key_exists("data", $data) || !is_array($data)) {
+            Log::warning(
+                "[FUJISAT] invalid response received from get token endpoint",
+                ["body" => $req->body(), "status" => $req->getStatusCode()]
+            );
+            return [];
+        }
+        $data = $data['data'];
+        $products = [];
+        foreach ($data as $offer) {
+            $options = [];
+
+            $offerName = $offer['description'];
+            $offerPrice = $offer['price'];
+            $offerCode = $offer['code'];
+
+            if (str_contains($offerName, 'DSTV')) {
+                continue;
+            }
+
+            $product = new Product;
+            $product->name = $offerName;
+            $product->description = $offerName;
+            $product->slug = $offerCode;
+            $product->provider_id_1 = $offerCode;
+            $product->price = $offerPrice;
+            $product->enabled = false;
+            $product->service()->associate($service);
+
+            foreach ($offer['options'] as $optionData) {
+                $option = new Option;
+                $option->code = $optionData['codeOption'];
+                $option->name = $optionData['descriptionOption'];
+                $option->amount = $optionData['priceOption'];
+
+                $options[] = $option;
+            }
+
+            $products[] = [
+                'product' => $product,
+                'options' => $options
+            ];
+        }
+
+        return $products;
     }
 
     private function getToken(): ?string
@@ -169,4 +244,49 @@ class FujisatService implements TransactionServiceInterface
 
         return $token;
     }
+
+    public function search(Service $service, string $query): ?SearchResult
+    {
+        $token = $this->getToken();
+        Log::info("[FUJISAT] sending subscriber search request", [
+            "query" => $query,
+        ]);
+        $res = $this->makeRequest($token)->get('/business/reabonnement', $payload = ["device" => $query,]);
+        Log::info("[FUJISAT] search response", ["body" => $res->body(), "status" => $res->status()]);
+        $data = $res->json();
+
+        if ($res->failed()) {
+            Log::warning(
+                "[FUJISAT] search request failed",
+                ["query" => $query, "request" => $payload, 'response' => $res->body(),]
+            );
+            return null;
+        }
+
+        if (!$data) {
+            Log::warning(
+                "[FUJISAT] invalid body received while generating a token",
+                ["response" => $res->body(),]
+            );
+            return null;
+        }
+
+        if (!array_key_exists("data", $data)) {
+            return null;
+        }
+
+        $data = $data['data'];
+        $subscription = $data['offreCodeLC'];
+        $product = $service->enabledProductsQuery()->where('provider_id_1', $subscription)->first();
+        if ($product == null) {
+            Log::warning(
+                "[FUJISAT] product not found for subscription code [$subscription]",
+                ["response" => $res->body()]
+            );
+            return null;
+        }
+
+        return new SearchResult($product);
+    }
+
 }

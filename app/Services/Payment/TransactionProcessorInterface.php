@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Payment;
 
+use App\Models\Option;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\TransactionKind;
@@ -13,7 +14,7 @@ interface TransactionProcessorInterface
         Product $product,
         string $destination,
         TransactionKind $kind,
-        ?int $amount = null,
+        int $amount = null,
     ): Transaction;
 
     public function process(Transaction $transaction): Transaction;
