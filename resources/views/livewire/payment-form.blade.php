@@ -55,6 +55,7 @@
                         <div wire:ignore>
                             <select class="mt-8" id="options" name="options[]" wire:model.lazy="selectedOptions"
                                 placeholder="Options">
+                                <option value="">Options</option>
                                 @foreach ($product->options as $option)
                                     <option value="{{ $option->id }}">
                                         {{ $option->name }}&nbsp;&nbsp;({{ $option->formatted_amount }} FCFA)
