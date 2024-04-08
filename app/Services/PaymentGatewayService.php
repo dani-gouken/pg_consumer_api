@@ -8,6 +8,7 @@ use App\Services\Payment\Status;
 use App\Services\Payment\TransactionResult;
 use App\Services\Payment\TransactionServiceInterface;
 use Http;
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -21,7 +22,7 @@ class PaymentGatewayService implements TransactionServiceInterface, HandlesCallb
     ) {
     }
 
-    protected function makeRequest()
+    protected function makeRequest(): PendingRequest
     {
         return Http::withOptions([
             "base_uri" => $this->baseUrl,
@@ -53,10 +54,10 @@ class PaymentGatewayService implements TransactionServiceInterface, HandlesCallb
                 Status::ERROR,
                 '',
                 'failed to initiate the payment',
-                $initiatedTx->status()
+                (string) $initiatedTx->status()
             );
         }
-        $initStatusCode = $initiatedTx->status();
+        $initStatusCode = (string)$initiatedTx->status();
         $initiatedTx = $initiatedTx->json();
         Log::info("Tx initiated", $initiatedTx);
 
@@ -86,7 +87,7 @@ class PaymentGatewayService implements TransactionServiceInterface, HandlesCallb
                 Status::ERROR,
                 $uuid,
                 'failed to execute the payment',
-                $executedTx->status()
+                (string) $executedTx->status()
             );
         }
 
@@ -125,7 +126,7 @@ class PaymentGatewayService implements TransactionServiceInterface, HandlesCallb
                 Status::ERROR,
                 $externalReference,
                 'Transaction not found',
-                $checkedTx->status()
+                (string)$checkedTx->status()
             );
         }
         $checkedTx = $checkedTx->json();

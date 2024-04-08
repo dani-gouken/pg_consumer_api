@@ -28,18 +28,18 @@ class ImportFujisatCanalPlusProducts extends Command
     /**
      * Execute the console command.
      */
-    public function handle(FujisatService $fujisatService)
+    public function handle(FujisatService $fujisatService): int
     {
         $serviceId = $this->argument('serviceId');
         $service = Service::find($serviceId);
 
         if (!$service) {
             $this->error(sprintf('service [%s] not found', $serviceId));
-            return self::SUCCESS;
+            return static::SUCCESS;
         }
 
         if (!$this->confirm(sprintf('Continue with service [%s]', $service->name))) {
-            return self::SUCCESS;
+            return static::SUCCESS;
         }
 
         $products = $fujisatService->getProducts($service);
@@ -57,8 +57,8 @@ class ImportFujisatCanalPlusProducts extends Command
             )
         );
 
-        if (!$this->confirm(sprintf('Continue? all the previous product of the service with a fixed price will be deleted', $service->name))) {
-            return self::SUCCESS;
+        if (!$this->confirm('Continue? all the previous product of the service with a fixed price will be deleted')) {
+            return static::SUCCESS;
         }
 
         $service->products()->where('fixed_price', true)->delete();
@@ -91,6 +91,6 @@ class ImportFujisatCanalPlusProducts extends Command
 
         $this->info('OK');
 
-        return self::SUCCESS;
+        return static::SUCCESS;
     }
 }

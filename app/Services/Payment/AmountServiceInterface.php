@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface AmountServiceInterface
 {
+    /** @param iterable<Option>|Collection<int,Option> $options **/
     public function getAmount(
         Product $product,
-        /** @param iterable<Option> */
-        iterable $options = [],
+        iterable|Collection $options = [],
         ?int $amount = null,
     ): ?int;
 }

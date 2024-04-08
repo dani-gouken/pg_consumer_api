@@ -15,7 +15,7 @@ class ServicePolicy
 
     }
 
-    public function viewProducts(?User $user, Service $service)
+    public function viewProducts(?User $user, Service $service): bool
     {
         return $service->enabled && $service->public;
     }

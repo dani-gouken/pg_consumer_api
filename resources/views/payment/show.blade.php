@@ -9,13 +9,11 @@
             <x-service-card title="{{ $product->name }}" :border="false" class="col-span-12 lg:col-span-5 mb-4 lg:mb-0">
                 <x-service-card :image="Vite::asset($service->logo_url)" :description="$product->description" img-small class="mb-6">
                     <p class="text-xl text-primary-700 my-8 font-bold text-center">
-                        @if ($product->fixed_price)
-                            {{ $product->formatted_price }} FCFA
-                        @endif
+                        {{ format_amount($payment->amount) }}
                     </p>
                 </x-service-card>
             </x-service-card>
-            <x-service-card :border="false" class="col-span-7" title="DETAILS">
+            <x-service-card :border="false" class="lg:col-span-7 col-span-12" title="DETAILS">
                 <div class="my-8">
                     @livewire('service-payment-status-stepper', ['code' => $payment->code])
                 </div>

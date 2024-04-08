@@ -2,73 +2,63 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SearchRequest;
 use App\Models\Product;
 use App\Models\Service;
 use App\Services\Payment\HandlesSearch;
-use App\Services\Payment\TransactionServiceResolverInterface;
+use App\Services\Payment\SearchServiceInterface;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Throwable;
 
 class SearchController extends Controller
 {
     public function __construct(
-        private TransactionServiceResolverInterface $transactionServiceResolver
+        private SearchServiceInterface $searchService
     ) {
     }
-    public function create(string $serviceSlug, string $productSlug): View
+    public function index(Service $service, Product $product): View
     {
-        $service = Service::findPubliclyUsableBySlugOrFail($serviceSlug);
-        $product = $service->enabledProductsQuery()->where("slug", "=", $productSlug)->firstOrFail();
-        abort_if($product->fixed_price || !$service->searchable, 404);
-
-        return view('search.create', compact('service', 'product'));
+        abort_if(!$service->searchable, 404);
+        $query = "";
+        return view('search.index', compact('service', 'product', 'query'));
     }
-    public function store(Request $request, string $serviceSlug, string $productSlug)
+
+    public function search(SearchRequest $request, Service $service, Product $product): View|RedirectResponse
     {
-        $service = Service::findPubliclyUsableBySlugOrFail($serviceSlug);
-        $product = $service->enabledProductsQuery()->where("slug", "=", $productSlug)->firstOrFail();
-
-
-        if ($product->fixed_price || !$service->searchable) {
+        if (!$service->searchable) {
             return redirect()->back()
                 ->withInput()
                 ->with('error', 'Service unavailable');
         }
+        
+        $query = $request->q;
 
-        $transactionService = $this->transactionServiceResolver->resolve(
-            $service->provider
+        $results = $this->searchService->search(
+            $service,
+            $product,
+            $query,
         );
+        
 
-        if (!($transactionService instanceof HandlesSearch)) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Service unavailable');
-        }
-
-        $result = null;
-        try {
-            $result = $transactionService->search($service, $request->q);
-        } catch (Throwable $e) {
+        if ($results instanceof Throwable) {
             \Log::error('search failed', [
-                "message" => $e->getMessage(),
-                "trace" => $e->getTraceAsString()
+                "message" => $results->getMessage(),
+                "trace" => $results->getTraceAsString()
             ]);
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Search failed');
+                ->with('error', 'Une érreur est survenu, veuillez réessayer');
         }
 
-        if ($result == null) {
+        if (empty($results)) {
             return redirect()->back()
                 ->withInput()
                 ->with('error', 'Aucun resultat trouvé');
         }
+        
+        $results = collect($results);
 
-        return redirect()->route('payment.create', [
-            'product' => $result->product->slug,
-            'service' => $serviceSlug,
-            'credit_destination' => $request->q,
-        ]);
+        return view('search.index', compact('service', 'product', 'results', 'query'));
     }
 }

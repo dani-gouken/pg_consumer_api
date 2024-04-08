@@ -13,9 +13,8 @@ use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
-    public function pay(ApiPaymentRequest $request, string $uuid, ServicePaymentProcessor $paymentProcessor)
+    public function pay(ApiPaymentRequest $request, Product $product, ServicePaymentProcessor $paymentProcessor): PaymentResource
     {
-        $product = Product::findByEnabledUuidOrFail($uuid);
         $service = $product->service;
         $this->authorize("viewProducts", $service);
         if (!$product->fixed_price) {
@@ -37,6 +36,7 @@ class ProductController extends Controller
             $product,
             $service,
             $paymentService,
+            options: [],
             debitDestination: $request->get("debit_destination"),
             creditDestination: $request->get("credit_destination"),
             amount: $request->get("amount")

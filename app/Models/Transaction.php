@@ -70,16 +70,25 @@ class Transaction extends Model
         return $this->status;
     }
 
+    /**
+     * @return BelongsTo<Service,self>
+     */
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
     }
-
-    public function product(): BelongsTo
+ 
+    /**
+     * @return BelongsTo<Product,self>
+     */
+   public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
+    /**
+     * @return BelongsTo<ServicePayment,self>
+     */
     public function servicePayment(): BelongsTo
     {
         return $this->belongsTo(ServicePayment::class);

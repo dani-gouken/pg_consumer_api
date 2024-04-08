@@ -4,16 +4,17 @@ namespace App\Livewire;
 
 use App\Models\ServicePayment;
 use App\Models\ServicePaymentStatusEnum;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class ServicePaymentStatusStepper extends Component
 {
     public ServicePayment $payment;
-    public function mount(string $code)
+    public function mount(string $code): void
     {
         $this->payment = ServicePayment::findByCodeOrFail($code);
     }
-    public function render()
+    public function render(): View
     {
         return view(
             'livewire.service-payment-status-stepper',
@@ -21,6 +22,9 @@ class ServicePaymentStatusStepper extends Component
         );
     }
 
+    /**
+     * @return array<array<string,string>>
+     */
     public function buildSteps(): array
     {
         $status = $this->payment->status;
@@ -32,7 +36,9 @@ class ServicePaymentStatusStepper extends Component
         ];
     }
 
-
+     /**
+     * @return array<array<string,string>>
+     */
     public function initStep(ServicePaymentStatusEnum $status): array
     {
         return match ($status) {
@@ -59,6 +65,10 @@ class ServicePaymentStatusStepper extends Component
             ],
         };
     }
+
+     /**
+     * @return array<array<string,string>>
+     */
     public function creditStep(ServicePaymentStatusEnum $status): array
     {
         return match ($status) {
@@ -80,7 +90,7 @@ class ServicePaymentStatusStepper extends Component
                 [
                     'title' => "Echec de l'achat du service",
                     'description' => "L'achat du service a échouer, notre support technique se chargera d'investiguer cette transaction. " .
-                    "Veuillez contacter notre service client pour en savoir plus",
+                        "Veuillez contacter notre service client pour en savoir plus",
                     'status' => "error"
                 ]
             ],
@@ -88,6 +98,10 @@ class ServicePaymentStatusStepper extends Component
             ],
         };
     }
+
+    /**
+     * @return array<array<string,string>>
+     */
     public function debitStep(ServicePaymentStatusEnum $status): array
     {
         return match ($status) {

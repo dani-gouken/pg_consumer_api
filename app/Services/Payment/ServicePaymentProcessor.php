@@ -1,8 +1,8 @@
 <?php
 namespace App\Services\Payment;
 
-use App\Jobs\PaymentJob;
 use App\Jobs\ProcessTransaction;
+use App\Models\Option;
 use App\Models\Product;
 use App\Models\Service;
 use App\Models\ServiceKindEnum;
@@ -11,6 +11,7 @@ use App\Models\ServicePaymentStatusEnum;
 use App\Models\Transaction;
 use App\Models\TransactionKind;
 use App\Services\Payment\Exceptions\TransactionInitFailureException;
+use Illuminate\Database\Eloquent\Collection;
 use Ramsey\Uuid\Uuid;
 use Random\Randomizer;
 
@@ -28,18 +29,12 @@ class ServicePaymentProcessor implements ServicePaymentProcessorInterface
         $servicePayment->save();
         $product = $servicePayment->paymentService->defaultProduct();
 
-        $amount = $this->amountService->getAmount($servicePayment->product, $servicePayment->options, $amount);
-
-        if (is_null($amount)) {
-            throw new TransactionInitFailureException("Amount is required for a product without a fixed price");
-        }
-
         try {
             $debitTx = $this->processor->createTransaction(
                 $product,
                 $servicePayment->debit_destination,
                 TransactionKind::debit,
-                $amount,
+                (int) $servicePayment->amount,
             );
             $debitTx->service_payment_id = $servicePayment->id;
             $debitTx->save();
@@ -105,6 +100,7 @@ class ServicePaymentProcessor implements ServicePaymentProcessorInterface
 
     public function findSuitablePaymentServiceByDestination(string $destination): ?Service
     {
+        /** @var Collection<int,Service> $paymentServices */
         $paymentServices = Service::ofKindQuery(ServiceKindEnum::payment)->get();
         foreach ($paymentServices as $paymentService) {
             if (preg_match("/{$paymentService->form_input_regex}/", $destination)) {
@@ -114,12 +110,14 @@ class ServicePaymentProcessor implements ServicePaymentProcessorInterface
         return null;
     }
 
+    /** @param array<Option> $options **/
     public function createServicePayment(
         Product $product,
         Service $service,
         Service $paymentService,
         string $debitDestination,
         string $creditDestination,
+        array $options = [],
         string $customerName = "",
         string $notificationEmail = "",
         string $notificationPhoneNumber = "",
@@ -128,8 +126,8 @@ class ServicePaymentProcessor implements ServicePaymentProcessorInterface
         if (!$product->fixed_price && is_null($amount)) {
             throw new TransactionInitFailureException("Amount is required for a product without a fixed price");
         }
-        $price = $product->fixed_price ? $product->price : $amount;
-        if (($price == null) || ($price <= 0)) {
+        $price = $this->amountService->getAmount($product, $options);
+        if ($price == null) {
             throw new TransactionInitFailureException("A valid price is required");
         }
         $random = new Randomizer;
@@ -142,7 +140,6 @@ class ServicePaymentProcessor implements ServicePaymentProcessorInterface
         $servicePayment->credit_destination = $creditDestination;
         $servicePayment->debit_destination = $debitDestination;
         $servicePayment->amount = (string) $price;
-
         $servicePayment->customer_name = $customerName;
         $servicePayment->notification_email = $notificationEmail;
         $servicePayment->notification_email = $notificationPhoneNumber;

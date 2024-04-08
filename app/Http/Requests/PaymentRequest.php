@@ -17,7 +17,7 @@ class PaymentRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array<string,\Illuminate\Contracts\Validation\ValidationRule|array<string>|string>
      */
     public function rules(): array
     {
@@ -25,7 +25,9 @@ class PaymentRequest extends FormRequest
             "product_id" => "required|int",
             "debit_destination" => "required|string",
             "credit_destination" => "required|string",
-            "amount" => "sometimes|decimal:0,2"
+            "amount" => "sometimes|decimal:0,2",
+            "options" => "nullable|array",
+            "options.*" => "integer|exists:options,id"
         ];
     }
 }

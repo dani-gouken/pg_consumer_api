@@ -15,10 +15,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $uuid
  * @property string $image
  * @property string $name
+ * @property bool $searchable
  * @property string $slug
  * @property string|null $provider_id_1
  * @property string|null $provider_id_2
- * @property string $kind
+ * @property string|ServiceKindEnum $kind
  * @property int $enabled
  * @property int $public
  * @property string $provider
@@ -73,16 +74,25 @@ class Service extends Model
         "kind" => ServiceKindEnum::class,
     ];
 
+    /**
+     * @return HasMany<Product>
+     */
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
     }
 
+    /**
+     * @return HasMany<Transaction>
+     */
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
     }
 
+    /**
+     * @return HasMany<Product>
+     */
     public function enabledProductsQuery(): HasMany
     {
         return $this->products()->where("enabled", "=", true);
@@ -94,7 +104,7 @@ class Service extends Model
     }
 
     /**
-     * @return Collection<int, Product|Model>
+     * @return Collection<int, Product>
      */
     public function enabledProducts(): Collection
     {
@@ -102,7 +112,7 @@ class Service extends Model
     }
 
     /**
-     * @return Collection<self>
+     * @return Collection<int,self>
      */
     public static function publicEnabled(): Collection
     {
@@ -117,13 +127,13 @@ class Service extends Model
             ->where("public", "=", true);
     }
 
-    public static function ofKindQuery(ServiceKindEnum $kind)
+    public static function ofKindQuery(ServiceKindEnum $kind): Builder
     {
         return self::where("enabled", "=", true)
             ->where("kind", $kind->value);
     }
 
-    public static function findPubliclyUsableBySlugOrFail(string $slug)
+    public static function findPubliclyUsableBySlugOrFail(string $slug): self
     {
         return Service::where("slug", "=", $slug)
             ->where("public", "=", true)
@@ -131,7 +141,7 @@ class Service extends Model
             ->firstOrFail();
     }
 
-    public static function findPubliclyUsableByIdOrFail(int $id)
+    public static function findPubliclyUsableByIdOrFail(int $id): self
     {
         return Service::where("id", "=", $id)
             ->where("public", "=", true)
@@ -139,8 +149,9 @@ class Service extends Model
             ->firstOrFail();
     }
 
-    public static function findOfKindById(ServiceKindEnum $kind, int $id)
-    {
+    public static function findOfKindById(ServiceKindEnum $kind, int $id): self
+    {   
+        /** @var Service **/
         return Service::ofKindQuery($kind)
             ->where("id", "=", $id)
             ->firstOrFail();
@@ -158,6 +169,9 @@ class Service extends Model
         return $kind;
     }
 
+    /**
+     * @return HasMany<Option>
+     */
     public function options(): HasMany
     {
         return $this->hasMany(Option::class);

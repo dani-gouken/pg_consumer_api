@@ -18,11 +18,18 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [ServiceController::class, "index"])->name("service.index");
-Route::get("/{service}", [ServiceController::class, "show"])->name("services.show");
 
 Route::get("/payment/{payment:code}", [PaymentController::class, "show"])->name("payment.show");
-Route::get("/{service}/{product}/payment", [PaymentController::class, "create"])->name("payment.create");
-Route::post("/{service}/{product}/payment", [PaymentController::class, "store"])->name("payment.store");
 
-Route::get("/{service}/{product}/search", [SearchController::class, "create"])->name("search.create");
-Route::post("/{service}/{product}/search", [SearchController::class, "store"])->name("search.store");
+Route::prefix("/{service}")->group(function () {
+    Route::get("/", [ServiceController::class, "show"])->name("services.show");
+
+    Route::prefix('/{product}')->group(function () {
+        Route::get("/payment", [PaymentController::class, "create"])->name("payment.create");
+        Route::post("/payment", [PaymentController::class, "store"])->name("payment.store");
+
+        Route::get("/search", [SearchController::class, "index"])->name("search.index");
+        Route::post("/search", [SearchController::class, "search"])->name("search.search");
+    })
+    ->scopeBindings();
+});

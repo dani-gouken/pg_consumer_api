@@ -75,7 +75,7 @@ class SmobilpayScrapingService implements TransactionServiceInterface
             default => new TransactionResult(Status::PENDING)
         };
     }
-    protected function collect(string $token, int $amount, bool $isRetry = false)
+    protected function collect(string $token, int $amount, bool $isRetry = false): string
     {
         $payload = [
             "email" => "",
@@ -250,6 +250,9 @@ class SmobilpayScrapingService implements TransactionServiceInterface
         return $setCookie->getValue();
     }
 
+    /**
+     * @return array{csrf:string,token:string}
+     */
     protected function getCsrfToken(): array
     {
         Log::info("loading csrf token");

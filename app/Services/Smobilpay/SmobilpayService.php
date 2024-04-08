@@ -123,8 +123,8 @@ class SmobilpayService implements TransactionServiceInterface
                     return new TransactionResult(
                         Status::ERROR,
                         externalReference: $transaction->external_reference,
-                        providerError: $payment->getErrorCode(),
-                        error: $this->mapErrorCode($payment->getErrorCode())
+                        providerError: (string) $payment->getErrorCode(),
+                        error: $this->mapErrorCode((string) $payment->getErrorCode())
                     );
 
             }
@@ -147,7 +147,7 @@ class SmobilpayService implements TransactionServiceInterface
             return new TransactionResult(
                 Status::ERROR,
                 $transaction->external_reference,
-                providerError: $e->getCode(),
+                providerError: (string)$e->getCode(),
                 error: 'an unpextected error occured during the status check'
             );
         } catch (\Throwable $e) {

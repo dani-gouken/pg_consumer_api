@@ -15,12 +15,15 @@ class Option extends Model
         return self::where('code', $code)->first();
     }
 
+    /**
+     * @return BelongsTo<Service,self>
+     */
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
     }
 
-    public function getFormattedAmountAttribute()
+    public function getFormattedAmountAttribute(): string
     {
         return number_format($this->amount, 0, ",", " ");
     }

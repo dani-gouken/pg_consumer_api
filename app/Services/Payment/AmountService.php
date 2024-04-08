@@ -4,13 +4,14 @@ namespace App\Services\Payment;
 
 use App\Models\Option;
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Collection;
 
 class AmountService implements AmountServiceInterface
 {
+    /** @param iterable<Option>|Collection<int,Option> $options **/
     public function getAmount(
         Product $product,
-        /** @param iterable<Option> */
-        iterable $options = [],
+        iterable|Collection $options = [],
         ?int $amount = null,
     ): ?int {
         $amount = $product->fixed_price ? $product->price : $amount;

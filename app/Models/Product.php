@@ -24,9 +24,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $slug
  * @property string|null $provider_id_1
  * @property string|null $provider_id_2
- * @property int $fixed_price
+ * @property bool $fixed_price
  * @property int|null $price
- * @property int $enabled
+ * @property bool $enabled
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Service|null $service
@@ -63,18 +63,26 @@ class Product extends Model
         "fixed_price" => "boolean",
         "promoted" => "boolean",
         "featured" => "boolean",
+        "enabled" => "boolean",
     ];
+
+    /**
+     * @return BelongsTo<Service, self>
+     */
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
     }
 
+    /**
+     * @return HasMany<Transaction>
+     */
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
     }
 
-    public function getFormattedPriceAttribute()
+    public function getFormattedPriceAttribute(): string
     {
         return number_format($this->price, 0, ",", " ");
     }
@@ -85,6 +93,12 @@ class Product extends Model
             ->where("enabled", "=", true)
             ->firstOrFail();
     }
+    public static function findByEnabledSlugOrFail(string $slug): self
+    {
+        return self::where("slug", "=", $slug)
+            ->where("enabled", "=", true)
+            ->firstOrFail();
+    }
     public static function findByEnabledUuidOrFail(string $uuid): self
     {
         return self::where("uuid", "=", $uuid)
@@ -92,6 +106,9 @@ class Product extends Model
             ->firstOrFail();
     }
 
+    /**
+     * @return BelongsToMany<Option>
+     */
     public function options(): BelongsToMany
     {
         return $this->belongsToMany(Option::class);

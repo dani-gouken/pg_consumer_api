@@ -5,7 +5,7 @@ namespace App\Services\Smobilpay;
 trait MapSmobilpayErrorCodes
 {
 
-    public function mapErrorCode(string $errorCode)
+    public function mapErrorCode(string $errorCode): string
     {
         return match ($errorCode) {
             "4000" => "Authorization header is invalid - Check for proper s3pAuth Authorization header building",

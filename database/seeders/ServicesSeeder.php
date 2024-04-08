@@ -154,6 +154,22 @@ class ServicesSeeder extends Seeder
                 "color" => "gray-900"
             ]
         ];
+
+        $canalPlusResubscription = new Product;
+        $canalPlusResubscription->service_id = $canalPlus->id;
+        $canalPlusResubscription->color = 'bg-black-900';
+        $canalPlusResubscription->name = "Réabonnement";
+        $canalPlusResubscription->description = "Réabonnement Canal +";
+        $canalPlusResubscription->uuid = Uuid::uuid4();
+        $canalPlusResubscription->slug = 'reabonnement';
+        $canalPlusResubscription->provider_id_1 = 'REABO';
+        $canalPlusResubscription->provider_id_2 = '';
+        $canalPlusResubscription->fixed_price = false;
+        $canalPlusResubscription->price = null;
+        $canalPlusResubscription->enabled = true;
+        $canalPlusResubscription->save();
+        
+        
         foreach ($canalPlusProducts as $data) {
             $product = new Product;
             $product->service_id = $canalPlus->id;
@@ -168,11 +184,12 @@ class ServicesSeeder extends Seeder
             $product->save();
         }
 
+
         $blue = new Service;
         $blue->name = "CAMTEL";
         $blue->image = "blue.png";
         $blue->slug = Str::slug($blue->name);
-        $blue->kind = ServiceKindEnum::bill->value;
+        $blue->kind = ServiceKindEnum::topup->value;
         $blue->uuid = Uuid::uuid4()->toString();
         $blue->min_amount = 10;
         $blue->max_amount = 50000;

@@ -60,32 +60,52 @@ class ServicePayment extends Model
 {
     use HasFactory;
 
+    /** @var array<string,string> **/
     protected $attributes = [
         "status" => ServicePaymentStatusEnum::draft->value
     ];
-
+    
+    /** @var array<string,string> **/
     protected $casts = [
         "status" => ServicePaymentStatusEnum::class
     ];
 
+
+    /**
+     * @return HasMany<Transaction>
+     */
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
     }
 
+    /**
+     * @return BelongsTo<Service, self>
+     */
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
     }
+
+    /**
+     * @return BelongsTo<Service, self>
+     */
     public function paymentService(): BelongsTo
     {
         return $this->belongsTo(Service::class, 'payment_service_id');
     }
+
+    /**
+     * @return BelongsTo<Product, self>
+     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
+    /**
+     * @return BelongsToMany<Option>
+     */
     public function options(): BelongsToMany
     {
         return $this->belongsToMany(Option::class);
@@ -96,7 +116,10 @@ class ServicePayment extends Model
         return number_format((int) $this->amount, 0, ",", " ") . " FCFA";
     }
 
-    public static function findByCodeOrFail(string $code)
+    /**
+     * @return ServicePayment
+     */
+    public static function findByCodeOrFail(string $code): self
     {
         return self::where("code", $code)->firstOrFail();
     }
